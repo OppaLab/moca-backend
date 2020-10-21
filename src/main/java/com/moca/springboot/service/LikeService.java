@@ -25,7 +25,7 @@ public class LikeService {
         like.setPost_id(likePost.getPost_id());
         like.setReview_id(likePost.getReview_id());
         like.setUser_id(likePost.getUser_id());
-//        like.setCreated_at(LocalDateTime.now());
+        like.setCreated_at(LocalDateTime.now());
 
         Like newLike = likeRepository.save(like);
 

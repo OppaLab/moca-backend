@@ -15,5 +15,5 @@ public class CreateComment {
     private long review_id;
     private long user_id;
     private String comment_text;
-//    private LocalDateTime created_time;
+    private LocalDateTime created_at;
 }

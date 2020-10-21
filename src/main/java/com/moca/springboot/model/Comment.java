@@ -9,13 +9,12 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-@SuppressWarnings("ALL")
 @NoArgsConstructor
 @Getter
 @Setter
 @AllArgsConstructor
 @Entity
-@Table(name = "comment")
+@Table(name = "comments")
 public class Comment
 {
     @Id
@@ -29,7 +28,7 @@ public class Comment
     private long user_id;
     @Column(nullable = false, unique = false)
     private String text;
-//    private LocalDateTime createdTime;
+    private LocalDateTime created_at;
 
 
 }
