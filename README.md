@@ -10,3 +10,4 @@ spring.datasource.username=root // 변경 불필요
 spring.datasource.password=root // mysql root 비밀번호
 spring.jpa.show-sql=true // 변경 불필요
 ```
+* Swagger URL: http://localhost:portnumber/swagger-ui.html
