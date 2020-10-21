@@ -1,6 +1,6 @@
 # SW캡스톤디자인 Spring Boot proejct
 
-###각자 로컬환경에 맞게 변경할것
+### 각자 로컬환경에 맞게 변경할것
 * application.properties
 ```
 server.port=8081 // 서버 포트
