@@ -33,6 +33,7 @@ public class CommentService {
     }
 
     public long deleteComment(DeleteComment deleteComment) {
+
         Comment comment = new Comment();
         comment.setComment_id(deleteComment.getComment_id());
         commentRepository.delete(comment);

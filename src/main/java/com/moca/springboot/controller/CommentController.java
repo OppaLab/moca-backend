@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-//@Controller
-//@RequestMapping(path="/webadmin")
 public class CommentController
 {
     @Autowired
@@ -25,12 +23,9 @@ public class CommentController
     @PostMapping("/api/comment/1")
     public @ResponseBody
     Long createComment (CreateComment createComment) {
-        Long commentId = commentService.createComment(createComment);
-        return commentId;
+        Long comment_id = commentService.createComment(createComment);
+        return comment_id;
     }
-
-//    @GetMapping("/api/comment1")
-//    public @ResponseBody
 
     @GetMapping("/api/all-comment")
     public @ResponseBody
@@ -41,8 +36,8 @@ public class CommentController
     @DeleteMapping("/api/comment/2")
     public @ResponseBody
     Long deleteComment(DeleteComment deleteComment) {
-        Long commentId = commentService.deleteComment(deleteComment);
-        return commentId;
+        Long comment_id = commentService.deleteComment(deleteComment);
+        return comment_id;
     }
 
 }
