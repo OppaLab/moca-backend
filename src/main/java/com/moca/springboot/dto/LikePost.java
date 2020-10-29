@@ -8,10 +8,10 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class LikePost {
-    private int like_id;
-    private int post_id;
-    private int review_id;
-    private int user_id;
-//    private LocalDateTime created_at;
+    private long like_id;
+    private long post_id;
+    private long review_id;
+    private long user_id;
+    private LocalDateTime created_at;
 
 }

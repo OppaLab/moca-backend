@@ -25,7 +25,7 @@ public class CommentService {
         comment.setReview_id(createComment.getReview_id());
         comment.setUser_id(createComment.getUser_id());
         comment.setText(createComment.getComment_text());
-//        comment.setCreatedTime(LocalDateTime.now());
+        comment.setCreated_at(LocalDateTime.now());
 
         Comment newComment = commentRepository.save(comment);
 
