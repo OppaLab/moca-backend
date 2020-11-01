@@ -8,6 +8,7 @@ import com.moca.springboot.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -24,7 +25,7 @@ public class PostService {
         post.setPost_contents(addPost.getPost_contents());
         post.setPost_sentiment_score(addPost.getPost_centiment_score());
         post.setThumbnail_image(addPost.getThumbnail_image());
-        post.setUpdated_time(LocalDateTime.now());
+        post.setUpdated_time(LocalDate.now());
 
         Post newPost = postRepository.save(post);
 

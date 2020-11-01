@@ -35,11 +35,10 @@ public class PostController {
         return postRepository.findAll();
     }
 
-    @PostMapping("/post")
-    public @ResponseBody
-    Long createPost(AddPost addPost){
-        Long post_id = postService.addPost(addPost);
-        return post_id;
+    @PutMapping("/post")
+    public Post createPost(@RequestBody Post post){
+        Post newPost = postRepository.save(post);
+        return newPost;
     }
 
     @DeleteMapping("/post{id}")
