@@ -3,12 +3,18 @@ package com.moca.springboot.service;
 
 import com.moca.springboot.dto.AddPost;
 import com.moca.springboot.dto.DeletePost;
-import com.moca.springboot.model.Post;
+import com.moca.springboot.entity.Post;
+import com.moca.springboot.entity.PostCategory;
+import com.moca.springboot.entity.User;
+import com.moca.springboot.repository.PostCategoryRepository;
 import com.moca.springboot.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PostService {
@@ -16,25 +22,42 @@ public class PostService {
     @Autowired
     PostRepository postRepository;
 
+    @Autowired
+    PostCategoryRepository postCategoryRepository;
 
-    public long addPost(AddPost addPost){
+    @Autowired
+    NaturalLanguageApiService naturalLanguageApiService;
+
+
+    public long addPost(AddPost addPost) throws IOException {
+
         Post post = new Post();
-        post.setPost_id(addPost.getPost_id());
-        post.setPost_title(addPost.getPost_title());
-        post.setPost_contents(addPost.getPost_contents());
-        post.setPost_sentiment_score(addPost.getPost_centiment_score());
-        post.setThumbnail_image(addPost.getThumbnail_image());
-        post.setUpdated_time(LocalDateTime.now());
+        post.setPostTitle(addPost.getPostTitle());
+        post.setPostBody(addPost.getPostBody());
+//        post.setThumbnail_image(post_sentiment_score);
+        post.setCreatedAt(LocalDateTime.now());
+        User user = new User();
+        user.setUserId(addPost.getUserId());
+        post.setUser(user);
 
+
+        List<PostCategory> postCategory = new ArrayList<>();
+        for (String categoryName : addPost.getPostCategories()) {
+            postCategory.add(new PostCategory(categoryName, post));
+            post.getPostCategories().addAll(postCategory);
+        }
         Post newPost = postRepository.save(post);
+        postCategoryRepository.saveAll(postCategory);
 
-        return newPost.getPost_id();
+        naturalLanguageApiService.naturalLanguageApi(addPost, newPost);
+
+        return newPost.getPostId();
     }
 
     private long deletePost(DeletePost deletePost) {
         Post post = new Post();
-        post.setPost_id(deletePost.getUser_id());
+        post.setPostId(deletePost.getUser_id());
         postRepository.delete(post);
-        return post.getPost_id();
+        return post.getPostId();
     }
 }

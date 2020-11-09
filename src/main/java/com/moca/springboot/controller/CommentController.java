@@ -1,8 +1,8 @@
 package com.moca.springboot.controller;
 
-import com.moca.springboot.dto.CreateComment;
+import com.moca.springboot.dto.CommentDTO;
 import com.moca.springboot.dto.DeleteComment;
-import com.moca.springboot.model.Comment;
+import com.moca.springboot.entity.Comment;
 import com.moca.springboot.repository.CommentRepository;
 import com.moca.springboot.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +20,10 @@ public class CommentController
     @Autowired
     private CommentService commentService;
 
-    @PostMapping("/api/comment/1")
+    @PostMapping("/comment")
     public @ResponseBody
-    Long createComment (CreateComment createComment) {
-        Long comment_id = commentService.createComment(createComment);
+    Long createComment(CommentDTO commentDTO) {
+        Long comment_id = commentService.createComment(commentDTO);
         return comment_id;
     }
 

@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class DeletePost {
-    private int user_id;
+    private Long user_id;
 }

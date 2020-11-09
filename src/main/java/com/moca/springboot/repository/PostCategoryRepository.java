@@ -1,0 +1,13 @@
+package com.moca.springboot.repository;
+
+import com.moca.springboot.entity.Post;
+import com.moca.springboot.entity.PostCategory;
+import com.moca.springboot.entity.PostCategoryPK;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface PostCategoryRepository extends JpaRepository<PostCategory, PostCategoryPK> {
+    List<PostCategory> findByPost(Post post);
+}
+

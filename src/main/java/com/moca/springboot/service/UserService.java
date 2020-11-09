@@ -1,8 +1,8 @@
 package com.moca.springboot.service;
 
-import com.moca.springboot.dto.SignUp;
-import com.moca.springboot.model.User;
-import com.moca.springboot.model.UserCategory;
+import com.moca.springboot.dto.SignUpDTO;
+import com.moca.springboot.entity.User;
+import com.moca.springboot.entity.UserCategory;
 import com.moca.springboot.repository.UserCategoryRepository;
 import com.moca.springboot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +20,13 @@ public class UserService {
     @Autowired
     private UserCategoryRepository userCategoryRepository;
 
-    public Long signUp(SignUp signUp) {
+    public Long signUp(SignUpDTO signUpDTO) {
 
         User user = new User();
-        user.setNickname(signUp.getNickname());
-        user.setEmail(signUp.getEmail());
-        user.setRecentAccessTime(LocalDateTime.now());
-
+        user.setNickname(signUpDTO.getNickname());
+        user.setEmail(signUpDTO.getEmail());
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUserSentimentScore(0);
         Optional<User> result = userRepository.findByEmail(user.getEmail());
         result.ifPresent(m -> {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
@@ -34,7 +34,7 @@ public class UserService {
 
         User newUser = userRepository.save(user);
         UserCategory userCategory = new UserCategory();
-        signUp.getUserCategoryList().forEach(category -> {
+        signUpDTO.getUserCategoryList().forEach(category -> {
             userCategory.setCategoryName(category);
             userCategory.setUser(newUser);
             userCategoryRepository.save(userCategory);

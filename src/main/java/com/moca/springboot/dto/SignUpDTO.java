@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class SignUp {
+public class SignUpDTO {
     private String nickname;
     private List<String> userCategoryList;
     private String email;
