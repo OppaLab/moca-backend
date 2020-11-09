@@ -1,8 +1,15 @@
 package com.moca.springboot.repository;
 
-import com.moca.springboot.model.UserCategory;
+import com.moca.springboot.entity.User;
+import com.moca.springboot.entity.UserCategory;
+import com.moca.springboot.entity.UserCategoryPK;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserCategoryRepository extends JpaRepository<UserCategory, String> {
+import java.util.List;
 
+public interface UserCategoryRepository extends JpaRepository<UserCategory, UserCategoryPK> {
+
+    List<UserCategory> findByUser_UserId(long userId);
+
+    List<UserCategory> findByUser(User user);
 }

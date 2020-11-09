@@ -1,13 +1,14 @@
 package com.moca.springboot.controller;
 
 import com.moca.springboot.dto.AddPost;
-import com.moca.springboot.model.Post;
+import com.moca.springboot.entity.Post;
 import com.moca.springboot.repository.PostRepository;
+import com.moca.springboot.service.NaturalLanguageApiService;
 import com.moca.springboot.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,10 +19,11 @@ public class PostController {
 
     @Autowired
     private PostService postService;
-
+    @Autowired
+    private NaturalLanguageApiService naturalLanguageApiService;
 
     @GetMapping("/post/{id}")
-    public Post getPost(@PathVariable String id){
+    public Post getPost(@PathVariable String id) {
         Long postID = Long.parseLong(id);
 
 
@@ -31,14 +33,15 @@ public class PostController {
     }
 
     @GetMapping("/post")
-    public List<Post> getAllPost(){
+    public List<Post> getAllPost() {
         return postRepository.findAll();
+
     }
 
     @PostMapping("/post")
     public @ResponseBody
-    Long createPost(AddPost addPost){
-        Long post_id = postService.addPost(addPost);
+    long createPost(AddPost addPost) throws IOException {
+        long post_id = postService.addPost(addPost);
         return post_id;
     }
 

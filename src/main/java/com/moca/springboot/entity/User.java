@@ -1,4 +1,4 @@
-package com.moca.springboot.model;
+package com.moca.springboot.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,18 +12,24 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userId;
     private String nickname;
     private String email;
-    private LocalDateTime recentAccessTime;
+    private LocalDateTime createdAt;
     private float userSentimentScore;
 
     @OneToMany(mappedBy = "user")
-    private List<UserCategory> userCategoryList;
+    private List<UserCategory> userCategories;
 
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts;
 
+    @OneToMany(mappedBy = "user")
+    private List<UserEntity> userEntities;
+
+    @OneToMany(mappedBy = "user")
+    private List<Feed> feeds;
 }
