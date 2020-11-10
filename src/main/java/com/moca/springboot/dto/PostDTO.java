@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 @Setter
 public class PostDTO {
-    String thumbnailImage;
+    String thumbnailImageFilePathName;
     String postTitle;
     String postBody;
     long userId;

@@ -8,6 +8,7 @@ import com.moca.springboot.service.PostService;
 import com.moca.springboot.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,7 +29,6 @@ public class PostController {
     public Post getPost(@PathVariable String id) {
         Long postID = Long.parseLong(id);
 
-
         Optional<Post> post = postRepository.findById(postID);
 
         return post.get();
@@ -41,10 +41,9 @@ public class PostController {
     }
 
     @PostMapping("/post")
-    public @ResponseBody
-    long addPost(PostDTO postDTO) throws IOException {
-        long post_id = postService.addPost(postDTO);
-        return post_id;
+    public long addPost(@RequestPart("thumbnailImageFile") MultipartFile thumbnailImageFile, PostDTO postDTO) throws IOException {
+        postDTO.setThumbnailImageFilePathName(postService.saveThumbnailImageFile(thumbnailImageFile, postDTO));
+        return postService.addPost(postDTO);
     }
 
     @DeleteMapping("/post/{id}")
