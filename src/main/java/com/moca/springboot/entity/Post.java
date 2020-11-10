@@ -1,29 +1,31 @@
 package com.moca.springboot.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-
+@RequiredArgsConstructor
 public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NonNull
     private Long postId;
 
     private String thumbnailImage;
     private String postTitle;
     private String postBody;
-    private LocalDateTime createdAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    private Date createdAt;
 
     @ManyToOne
     @JoinColumn(name = "userId")
@@ -46,5 +48,8 @@ public class Post {
 
     @OneToMany(mappedBy = "post")
     private List<Feed> feeds;
+
+    @OneToOne(mappedBy = "post")
+    private Review review;
 
 }

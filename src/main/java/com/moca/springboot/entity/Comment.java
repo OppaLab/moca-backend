@@ -3,9 +3,10 @@ package com.moca.springboot.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -16,12 +17,19 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long commentId;
 
-    private long reviewId;
+    @ManyToOne
+    @JoinColumn(name = "reviewId")
+    private Review review;
 
-    private long userId;
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
 
-    private String text;
-    private LocalDateTime createdAt;
+    private String comment;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    private Date createdAt;
 
     @ManyToOne
     @JoinColumn(name = "postId")

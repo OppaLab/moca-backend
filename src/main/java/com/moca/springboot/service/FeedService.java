@@ -33,12 +33,12 @@ public class FeedService {
     @Autowired
     FeedRepository feedRepository;
 
-    @Scheduled(cron = "0/15 * * * * *")
+    // 매일 30분마다 알고리즘 실행
+    @Scheduled(cron = "0 0/30 * * * *")
     public void runFeedAlgorithm() {
 
         List<Post> posts = postRepository.findAll();
         List<User> users = userRepository.findAll();
-        List<Feed> feeds = new ArrayList<>();
         List<Score> scores = new ArrayList<>();
         Score score;
 

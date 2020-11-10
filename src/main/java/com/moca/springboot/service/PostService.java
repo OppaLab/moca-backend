@@ -1,8 +1,8 @@
 package com.moca.springboot.service;
 
 
-import com.moca.springboot.dto.AddPost;
 import com.moca.springboot.dto.DeletePost;
+import com.moca.springboot.dto.PostDTO;
 import com.moca.springboot.entity.Post;
 import com.moca.springboot.entity.PostCategory;
 import com.moca.springboot.entity.User;
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,27 +28,27 @@ public class PostService {
     NaturalLanguageApiService naturalLanguageApiService;
 
 
-    public long addPost(AddPost addPost) throws IOException {
+    public long addPost(PostDTO postDTO) throws IOException {
 
         Post post = new Post();
-        post.setPostTitle(addPost.getPostTitle());
-        post.setPostBody(addPost.getPostBody());
+        post.setPostTitle(postDTO.getPostTitle());
+        post.setPostBody(postDTO.getPostBody());
 //        post.setThumbnail_image(post_sentiment_score);
-        post.setCreatedAt(LocalDateTime.now());
+//        post.setCreatedAt(LocalDateTime.now());
         User user = new User();
-        user.setUserId(addPost.getUserId());
+        user.setUserId(postDTO.getUserId());
         post.setUser(user);
 
 
         List<PostCategory> postCategory = new ArrayList<>();
-        for (String categoryName : addPost.getPostCategories()) {
+        for (String categoryName : postDTO.getPostCategories()) {
             postCategory.add(new PostCategory(categoryName, post));
             post.getPostCategories().addAll(postCategory);
         }
         Post newPost = postRepository.save(post);
         postCategoryRepository.saveAll(postCategory);
 
-        naturalLanguageApiService.naturalLanguageApi(addPost, newPost);
+        naturalLanguageApiService.naturalLanguageApi(postDTO, newPost);
 
         return newPost.getPostId();
     }

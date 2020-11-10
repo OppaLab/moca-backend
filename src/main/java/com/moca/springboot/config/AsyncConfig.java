@@ -17,7 +17,7 @@ public class AsyncConfig extends AsyncConfigurerSupport {
         executor.setCorePoolSize(2);
         executor.setMaxPoolSize(10);
         executor.setQueueCapacity(500);
-        executor.setThreadNamePrefix("heowc-async-");
+        executor.setThreadNamePrefix("feed-algorithm-scheduler");
         executor.initialize();
         return executor;
     }

@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UnlikeDTO {
-    private int like_id;
+    private int likeId;
 }

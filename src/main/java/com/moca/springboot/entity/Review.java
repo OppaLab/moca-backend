@@ -1,37 +1,37 @@
 package com.moca.springboot.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
-
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Entity
-@Table(name = "`like`")
-public class Like {
+public class Review {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long likeId;
-
-    @ManyToOne
-    @JoinColumn(name = "reviewId")
-    private Review review;
-
+    @NonNull
+    private long review_id;
+    @OneToOne
+    @JoinColumn(name = "postId")
+    private Post post;
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
-
+    private String review;
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
     private Date createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "postId")
-    private Post post;
+    @OneToMany(mappedBy = "review")
+    private List<Like> likes;
+
+    @OneToMany(mappedBy = "review")
+    private List<Comment> comments;
 }
