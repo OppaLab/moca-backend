@@ -19,6 +19,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private UserCategoryRepository userCategoryRepository;
+    @Autowired
+    private FeedAlgorithmService feedAlgorithmService;
 
     public Long signUp(SignUpDTO signUpDTO) {
 
@@ -40,6 +42,8 @@ public class UserService {
             userCategoryRepository.save(userCategory);
         });
 
+        // 새로 가입한 회원에 대해서 피드 알고리즘 돌림
+        feedAlgorithmService.runFeedAlgorithmForNewUser(newUser);
 
         return newUser.getUserId();
     }
