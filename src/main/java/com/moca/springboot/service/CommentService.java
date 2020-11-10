@@ -4,11 +4,10 @@ import com.moca.springboot.dto.CommentDTO;
 import com.moca.springboot.dto.DeleteComment;
 import com.moca.springboot.entity.Comment;
 import com.moca.springboot.entity.Post;
+import com.moca.springboot.entity.User;
 import com.moca.springboot.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 @Service
 public class CommentService {
@@ -23,9 +22,8 @@ public class CommentService {
         post.setPostId(commentDTO.getPostId());
         comment.setPost(post);
 //        comment.setReviewId(commentDTO.getReviewId());
-        comment.setUserId(commentDTO.getUserId());
-        comment.setText(commentDTO.getText());
-        comment.setCreatedAt(LocalDateTime.now());
+        comment.setUser(new User(commentDTO.getUserId()));
+        comment.setComment(commentDTO.getComment());
 
         Comment newComment = commentRepository.save(comment);
 

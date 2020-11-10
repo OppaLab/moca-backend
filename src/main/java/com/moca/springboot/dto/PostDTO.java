@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class AddPost {
+public class PostDTO {
     String thumbnailImage;
     String postTitle;
     String postBody;
