@@ -54,6 +54,8 @@ public class FeedAlgorithmService {
             }
 
             for (Post post : posts) {
+                if (post.getUser().getUserId() == user.getUserId())
+                    continue;
                 score = new Score();
                 score.setPostId(post.getPostId());
                 score.setUserId(user.getUserId());
@@ -87,6 +89,8 @@ public class FeedAlgorithmService {
             }
 
             for (Post post : posts) {
+                if (post.getUser().getUserId() == user.getUserId())
+                    continue;
                 score = scores.stream()
                         .filter(object -> object.getUserId() == user.getUserId()
                                 && object.getPostId() == post.getPostId()).findFirst().get();
@@ -113,6 +117,8 @@ public class FeedAlgorithmService {
         for (User user : users) {
             int recencyScore = 0;
             for (Post post : posts) {
+                if (post.getUser().getUserId() == user.getUserId())
+                    continue;
                 score = scores.stream()
                         .filter(object -> object.getUserId() == user.getUserId()
                                 && object.getPostId() == post.getPostId()).findFirst().get();
@@ -128,6 +134,8 @@ public class FeedAlgorithmService {
 
         for (User user : users) {
             for (Post post : posts) {
+                if (post.getUser().getUserId() == user.getUserId())
+                    continue;
                 score = scores.stream()
                         .filter(object -> object.getUserId() == user.getUserId()
                                 && object.getPostId() == post.getPostId()).findFirst().get();
@@ -142,6 +150,8 @@ public class FeedAlgorithmService {
         // post와 user의 sentiment score 비교
         for (User user : users) {
             for (Post post : posts) {
+                if (post.getUser().getUserId() == user.getUserId())
+                    continue;
                 score = scores.stream()
                         .filter(object -> object.getUserId() == user.getUserId()
                                 && object.getPostId() == post.getPostId()).findFirst().get();
@@ -178,6 +188,8 @@ public class FeedAlgorithmService {
                     .max(Comparator.comparing(Score::getSentimentScore)).get().getSentimentScore();
 
             for (Post post : posts) {
+                if (post.getUser().getUserId() == user.getUserId())
+                    continue;
                 score = scores.stream()
                         .filter(object -> object.getUserId() == user.getUserId()
                                 && object.getPostId() == post.getPostId()).findFirst().get();

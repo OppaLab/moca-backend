@@ -15,5 +15,5 @@ public class FeedDTO {
     private String postTitle;
     private String postBody;
     private String thumbnailImageFilePath;
-    private int createdAt;
+    private long createdAt;
 }
