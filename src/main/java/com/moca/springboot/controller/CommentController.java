@@ -1,7 +1,7 @@
 package com.moca.springboot.controller;
 
-import com.moca.springboot.dto.CommentDTO;
-import com.moca.springboot.dto.DeleteComment;
+import com.moca.springboot.dto.requestDto.CommentDTO;
+import com.moca.springboot.dto.requestDto.DeleteComment;
 import com.moca.springboot.entity.Comment;
 import com.moca.springboot.repository.CommentRepository;
 import com.moca.springboot.service.CommentService;

@@ -1,8 +1,8 @@
 package com.moca.springboot.service;
 
 
-import com.moca.springboot.dto.DeletePost;
-import com.moca.springboot.dto.PostDTO;
+import com.moca.springboot.dto.requestDto.DeletePost;
+import com.moca.springboot.dto.requestDto.PostDTO;
 import com.moca.springboot.entity.Post;
 import com.moca.springboot.entity.PostCategory;
 import com.moca.springboot.entity.User;
