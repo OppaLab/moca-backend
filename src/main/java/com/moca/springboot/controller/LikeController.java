@@ -1,7 +1,7 @@
 package com.moca.springboot.controller;
 
-import com.moca.springboot.dto.LikeDTO;
-import com.moca.springboot.dto.UnlikeDTO;
+import com.moca.springboot.dto.requestDto.LikeDTO;
+import com.moca.springboot.dto.requestDto.UnlikeDTO;
 import com.moca.springboot.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;

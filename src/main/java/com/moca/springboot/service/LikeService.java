@@ -1,7 +1,7 @@
 package com.moca.springboot.service;
 
-import com.moca.springboot.dto.LikeDTO;
-import com.moca.springboot.dto.UnlikeDTO;
+import com.moca.springboot.dto.requestDto.LikeDTO;
+import com.moca.springboot.dto.requestDto.UnlikeDTO;
 import com.moca.springboot.entity.Like;
 import com.moca.springboot.entity.Post;
 import com.moca.springboot.entity.Review;

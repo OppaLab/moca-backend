@@ -1,6 +1,6 @@
 package com.moca.springboot.controller;
 
-import com.moca.springboot.dto.SignUpDTO;
+import com.moca.springboot.dto.requestDto.SignUpDTO;
 import com.moca.springboot.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

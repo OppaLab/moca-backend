@@ -1,6 +1,6 @@
 package com.moca.springboot.service;
 
-import com.moca.springboot.dto.ReviewDTO;
+import com.moca.springboot.dto.requestDto.ReviewDTO;
 import com.moca.springboot.entity.Post;
 import com.moca.springboot.entity.Review;
 import com.moca.springboot.entity.User;

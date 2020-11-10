@@ -20,7 +20,7 @@ public class Post {
     @NonNull
     private Long postId;
 
-    private String thumbnailImage;
+    private String thumbnailImageFilePath;
     private String postTitle;
     private String postBody;
     @Temporal(TemporalType.TIMESTAMP)

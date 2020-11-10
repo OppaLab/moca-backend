@@ -1,4 +1,4 @@
-package com.moca.springboot.dto;
+package com.moca.springboot.dto.requestDto;
 
 import lombok.Data;
 

@@ -3,7 +3,7 @@ package com.moca.springboot.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -19,7 +19,7 @@ public class User {
     private String nickname;
     private String email;
 
-    private LocalDateTime createdAt;
+    private Date createdAt;
     private float userSentimentScore;
 
     @OneToMany(mappedBy = "user")
