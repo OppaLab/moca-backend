@@ -7,7 +7,7 @@ plugins {
 
 group = 'com.moca'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+
 
 configurations {
     compileOnly {
@@ -20,6 +20,8 @@ repositories {
 }
 
 dependencies {
+    compile 'com.amazonaws:aws-java-sdk-s3:1.11.238'
+    compile'org.springframework.boot:spring-boot-devtools'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'junit:junit:4.12'

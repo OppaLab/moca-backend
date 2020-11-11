@@ -10,14 +10,19 @@ import com.moca.springboot.repository.LikeRepository;
 import com.moca.springboot.repository.PostCategoryRepository;
 import com.moca.springboot.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +45,12 @@ public class PostService {
 
     @Autowired
     CommentRepository commentRepository;
+
+    @Value("${ncp.accesskey}")
+    private String accessKey;
+    @Value("${ncp.secretkey}")
+    private String secretKey;
+
 
     public long createPost(PostDTO.CreatePostRequest createPostRequest) throws IOException {
 
@@ -74,18 +85,66 @@ public class PostService {
         return post.getPostId();
     }
 
-    public String saveThumbnailImageFile(MultipartFile thumbnailImageFile) {
+    public String saveThumbnailImageFile(PostDTO.CreatePostRequest createPostRequest) {
+//        final String endPoint = "https://kr.object.ncloudstorage.com";
+//        final String regionName = "kr-standard";
+//
+//// S3 client
+//        final AmazonS3 s3 = AmazonS3ClientBuilder.standard()
+//                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
+//                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
+//                .build();
+//
+//
+//        String bucketName = "thumbnail-images";
+//
+//// create folder
+//        String folderName = createPostRequest.getUserId() + "/";
+//
+//        ObjectMetadata objectMetadata = new ObjectMetadata();
+//        objectMetadata.setContentLength(0L);
+//        objectMetadata.setContentType("application/x-directory");
+//        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, folderName, new ByteArrayInputStream(new byte[0]), objectMetadata);
+//
+//        try {
+//            s3.putObject(putObjectRequest);
+//            System.out.format("Folder %s has been created.\n", folderName);
+//        } catch (AmazonS3Exception e) {
+//            e.printStackTrace();
+//        } catch (SdkClientException e) {
+//            e.printStackTrace();
+//        }
+//
+//// upload local file
+//        UUID uid = UUID.randomUUID();
+//        String fileExtension = StringUtils.getFilenameExtension(createPostRequest.getThumbnailImageFile().getOriginalFilename());
+//        String objectName = folderName + uid + "." + fileExtension;
+//        objectMetadata.setContentType(createPostRequest.getThumbnailImageFile().getContentType());
+//        objectMetadata.setContentLength(createPostRequest.getThumbnailImageFile().getSize());
+//
+////        objectMetadata.setHeader("filename", createPostRequest.getThumbnailImageFile().getOriginalFilename());
+//        try {
+//            s3.putObject(new PutObjectRequest(bucketName,objectName,createPostRequest.getThumbnailImageFile().getInputStream(),objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
+////            s3.putObject(bucketName, objectName, createPostRequest.getThumbnailImageFile().getInputStream(), objectMetadata).;
+//            System.out.format("Object %s has been created.\n", objectName);
+//        } catch (AmazonS3Exception e) {
+//            e.printStackTrace();
+//        } catch (SdkClientException | IOException e) {
+//            e.printStackTrace();
+//        }
+//        return endPoint + "/thumbnail-images/" + objectName;
+        String baseUri = "C:\\Users\\jaewa\\IdeaProjects\\MOCA\\src\\main\\resources\\static\\images";
         UUID uid = UUID.randomUUID();
-        String baseUri = "C:\\Users\\jaewa\\IdeaProjects\\MOCA\\src\\main\\resources\\images";
-        String fileExtension = StringUtils.getFilenameExtension(thumbnailImageFile.getOriginalFilename());
+        String fileExtension = StringUtils.getFilenameExtension(createPostRequest.getThumbnailImageFile().getOriginalFilename());
         String filePathName = baseUri + File.separator + uid + "." + fileExtension;
         try {
-            thumbnailImageFile.transferTo(new File(filePathName));
+            createPostRequest.getThumbnailImageFile().transferTo(new File(filePathName));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return filePathName;
+        return uid + "." + fileExtension;
     }
+
 
     public Page<PostDTO.GetMyPostsResponse> getMyPosts(long userId, Pageable pageable) {
         ;
@@ -111,5 +170,11 @@ public class PostService {
                     return getMyPostsResponse;
                 });
         return getMyPostsResponses;
+    }
+
+    public Resource getThumbnailImage(String fileName) throws MalformedURLException {
+
+        Path path = Paths.get("C:\\Users\\jaewa\\IdeaProjects\\MOCA\\src\\main\\resources\\static\\images" + File.separator + fileName);
+        return new UrlResource(path.toUri());
     }
 }

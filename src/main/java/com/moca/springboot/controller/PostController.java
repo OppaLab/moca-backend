@@ -7,12 +7,16 @@ import com.moca.springboot.service.FeedService;
 import com.moca.springboot.service.PostService;
 import com.moca.springboot.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @RestController
@@ -43,7 +47,7 @@ public class PostController {
 
     @PostMapping("/post")
     public long createPost(PostDTO.CreatePostRequest createPostRequest) throws IOException {
-        createPostRequest.setThumbnailImageFilePathName(postService.saveThumbnailImageFile(createPostRequest.getThumbnailImageFile()));
+        createPostRequest.setThumbnailImageFilePathName(postService.saveThumbnailImageFile(createPostRequest));
         return postService.createPost(createPostRequest);
     }
 
@@ -56,5 +60,14 @@ public class PostController {
     @PostMapping("/review")
     public long createReview(PostDTO.CreateReviewRequest createReviewRequest) {
         return reviewService.createReview(createReviewRequest);
+    }
+
+    @GetMapping("/images/{fileName}")
+    public ResponseEntity<Resource> getThumbnailImage(@PathVariable(value = "fileName") String fileName, HttpServletRequest request) throws IOException {
+        Resource resource = postService.getThumbnailImage(fileName);
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(request.getServletContext().
+                        getMimeType(resource.getFile().getAbsolutePath())))
+                .body(resource);
     }
 }

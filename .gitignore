@@ -33,3 +33,4 @@ out/
 ### VS Code ###
 .vscode/
 /src/main/resources/AutoML-2b824b304617.json
+/src/main/resources/key.properties
