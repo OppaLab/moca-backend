@@ -17,7 +17,7 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NonNull
-    private long review_id;
+    private long reviewId;
     @OneToOne
     @JoinColumn(name = "postId")
     private Post post;

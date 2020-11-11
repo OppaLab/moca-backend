@@ -1,6 +1,6 @@
 package com.moca.springboot.service;
 
-import com.moca.springboot.dto.requestDto.SignUpDTO;
+import com.moca.springboot.dto.UserDTO;
 import com.moca.springboot.entity.User;
 import com.moca.springboot.entity.UserCategory;
 import com.moca.springboot.repository.UserCategoryRepository;
@@ -22,11 +22,11 @@ public class UserService {
     @Autowired
     private FeedAlgorithmService feedAlgorithmService;
 
-    public Long signUp(SignUpDTO signUpDTO) {
+    public Long signUp(UserDTO.SignUpRequest signUpRequest) {
 
         User user = new User();
-        user.setNickname(signUpDTO.getNickname());
-        user.setEmail(signUpDTO.getEmail());
+        user.setNickname(signUpRequest.getNickname());
+        user.setEmail(signUpRequest.getEmail());
         user.setCreatedAt(new Date());
         user.setUserSentimentScore(0);
         Optional<User> result = userRepository.findByEmail(user.getEmail());
@@ -36,7 +36,7 @@ public class UserService {
 
         User newUser = userRepository.save(user);
         UserCategory userCategory = new UserCategory();
-        signUpDTO.getUserCategoryList().forEach(category -> {
+        signUpRequest.getUserCategoryList().forEach(category -> {
             userCategory.setCategoryName(category);
             userCategory.setUser(newUser);
             userCategoryRepository.save(userCategory);

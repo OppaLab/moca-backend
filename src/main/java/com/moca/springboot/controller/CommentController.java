@@ -1,43 +1,37 @@
 package com.moca.springboot.controller;
 
-import com.moca.springboot.dto.requestDto.CommentDTO;
-import com.moca.springboot.dto.requestDto.DeleteComment;
-import com.moca.springboot.entity.Comment;
-import com.moca.springboot.repository.CommentRepository;
+import com.moca.springboot.dto.CommentDTO;
 import com.moca.springboot.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 
 @RequiredArgsConstructor
 @RestController
-public class CommentController
-{
-    @Autowired
-    private CommentRepository commentRepository;
+public class CommentController {
 
     @Autowired
     private CommentService commentService;
 
     @PostMapping("/comment")
-    public @ResponseBody
-    Long createComment(CommentDTO commentDTO) {
-        Long comment_id = commentService.createComment(commentDTO);
-        return comment_id;
+    public long createComment(CommentDTO.CreateCommentRequest createCommentRequest) {
+        return commentService.createComment(createCommentRequest);
     }
 
-    @GetMapping("/api/all-comment")
-    public @ResponseBody
-    Iterable<Comment> getAllComments() {
-        return commentRepository.findAll();
+    @GetMapping("/comment")
+    public Page<CommentDTO.GetCommentsOnPostResponse> getCommentsOnPost(@RequestParam(value = "postId") long postId,
+                                                                        @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return commentService.getCommentsOnPost(postId, pageable);
     }
 
-    @DeleteMapping("/api/comment/2")
-    public @ResponseBody
-    Long deleteComment(DeleteComment deleteComment) {
-        Long comment_id = commentService.deleteComment(deleteComment);
-        return comment_id;
+    @DeleteMapping("/comment")
+    public long deleteComment(@RequestParam(value = "commentId") long commentId, @RequestParam(value = "userId") long userId) {
+        return commentService.deleteComment(commentId, userId);
     }
 
 }

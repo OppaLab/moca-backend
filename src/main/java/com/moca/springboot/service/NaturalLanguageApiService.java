@@ -4,7 +4,7 @@ import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.Entity;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
-import com.moca.springboot.dto.requestDto.PostDTO;
+import com.moca.springboot.dto.PostDTO;
 import com.moca.springboot.entity.Post;
 import com.moca.springboot.entity.PostEntity;
 import com.moca.springboot.entity.User;
@@ -38,11 +38,11 @@ public class NaturalLanguageApiService {
     private UserRepository userRepository;
 
     @Async
-    public void naturalLanguageApi(PostDTO postDTO, Post post) throws IOException {
+    public void naturalLanguageApi(PostDTO.CreatePostRequest createPostRequest, Post post) throws IOException {
         try (LanguageServiceClient language = LanguageServiceClient.create()) {
 
             // The text to analyze
-            String comment = postDTO.getPostTitle() + "\n" + postDTO.getPostBody();
+            String comment = createPostRequest.getPostTitle() + "\n" + createPostRequest.getPostBody();
 
             Document doc = Document.newBuilder().setContent(comment).setType(Document.Type.PLAIN_TEXT).build();
 
@@ -72,7 +72,7 @@ public class NaturalLanguageApiService {
             }
 
             User user = new User();
-            user.setUserId(postDTO.getUserId());
+            user.setUserId(createPostRequest.getUserId());
 
             for (int i = 0; i < entityCount; i++) {
                 List<UserEntity> userEntities = userEntityRepository.findByUser(user);
@@ -108,10 +108,9 @@ public class NaturalLanguageApiService {
 
             post.setPostSentimentScore(sentiment.getScore());
             postRepository.save(post);
-            user = userRepository.findById(postDTO.getUserId()).get();
+            user = userRepository.findById(createPostRequest.getUserId()).get();
             user.setUserSentimentScore((user.getUserSentimentScore() + post.getPostSentimentScore()) / 2);
             userRepository.save(user);
-
 
         }
     }

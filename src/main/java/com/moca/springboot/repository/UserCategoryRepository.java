@@ -2,7 +2,7 @@ package com.moca.springboot.repository;
 
 import com.moca.springboot.entity.User;
 import com.moca.springboot.entity.UserCategory;
-import com.moca.springboot.entity.UserCategoryPK;
+import com.moca.springboot.entity.pk.UserCategoryPK;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

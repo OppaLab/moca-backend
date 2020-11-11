@@ -1,6 +1,6 @@
 package com.moca.springboot.controller;
 
-import com.moca.springboot.dto.requestDto.SignUpDTO;
+import com.moca.springboot.dto.UserDTO;
 import com.moca.springboot.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,10 +20,10 @@ public class UserController {
 
     @ApiOperation(value = "회원가입", notes = "처음 구글 로그인시 회원가입을진행하고 인증 쿠키를 발급합니다")
     @PostMapping("/signup")
-    public Long signUp(SignUpDTO signUpDTO, HttpServletResponse response) {
+    public Long signUp(UserDTO.SignUpRequest signUpRequest, HttpServletResponse response) {
 
 
-        Long userId = userService.signUp(signUpDTO);
+        Long userId = userService.signUp(signUpRequest);
 
         Cookie session = new Cookie("userId", userId.toString());
         session.setMaxAge(60 * 60 * 24 * 30 * 3);

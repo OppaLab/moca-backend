@@ -1,7 +1,6 @@
 package com.moca.springboot.service;
 
-import com.moca.springboot.dto.requestDto.LikeDTO;
-import com.moca.springboot.dto.requestDto.UnlikeDTO;
+import com.moca.springboot.dto.LikeDTO;
 import com.moca.springboot.entity.Like;
 import com.moca.springboot.entity.Post;
 import com.moca.springboot.entity.Review;
@@ -16,22 +15,21 @@ public class LikeService {
     @Autowired
     private LikeRepository likeRepository;
 
-    public long like(LikeDTO likeDTO) {
-
+    public long createLike(LikeDTO.CreateLikeRequest createLikeRequest) {
         Like like = new Like();
-
-        like.setUser(new User(likeDTO.getUserId()));
-        like.setReview(new Review(likeDTO.getReviewId()));
-        like.setPost(new Post(likeDTO.getPostId()));
+        if (!createLikeRequest.getPostId().isEmpty())
+            like.setPost(new Post(Long.parseLong(createLikeRequest.getPostId())));
+        if (!createLikeRequest.getReviewId().isEmpty())
+            like.setReview(new Review(Long.parseLong(createLikeRequest.getReviewId())));
+        like.setUser(new User(createLikeRequest.getUserId()));
         Like newLike = likeRepository.save(like);
-
         return newLike.getLikeId();
     }
 
-    public long unlike(UnlikeDTO unlikeDTO) {
-
+    public long deleteLike(LikeDTO.DeleteLikeRequest deleteLikeRequest) {
         Like like = new Like();
-        like.setLikeId(unlikeDTO.getLikeId());
+        like.setUser(new User(deleteLikeRequest.getUserId()));
+        like.setPost(new Post(deleteLikeRequest.getPostId()));
         likeRepository.delete(like);
         return like.getLikeId();
     }
