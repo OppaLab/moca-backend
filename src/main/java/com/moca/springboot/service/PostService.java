@@ -47,12 +47,12 @@ public class PostService {
     @Autowired
     CommentRepository commentRepository;
 
-    @Value("${ncp.accesskey}")
-    private String accessKey;
-    @Value("${ncp.secretkey}")
-    private String secretKey;
-    @Value("${image.thumbnail.basedir}")
-    private String basedir;
+//    @Value("${ncp.accesskey}")
+//    private String accessKey;
+//    @Value("${ncp.secretkey}")
+//    private String secretKey;
+@Value("${image.thumbnail.basedir}")
+private String basedir;
 
 
     public long createPost(PostDTO.CreatePostRequest createPostRequest) throws IOException {
