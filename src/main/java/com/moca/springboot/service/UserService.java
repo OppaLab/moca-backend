@@ -17,7 +17,6 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -39,10 +38,10 @@ public class UserService {
         user.setEmail(signUpRequest.getEmail());
         user.setCreatedAt(new Date());
         user.setUserSentimentScore(0);
-        Optional<User> result = userRepository.findByEmail(user.getEmail());
-        result.ifPresent(m -> {
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
-        });
+//        Optional<User> result = userRepository.findByEmail(user.getEmail());
+//        result.ifPresent(m -> {
+//            throw new IllegalStateException("이미 존재하는 회원입니다.");
+//        });
 
         User newUser = userRepository.save(user);
         UserCategory userCategory = new UserCategory();
