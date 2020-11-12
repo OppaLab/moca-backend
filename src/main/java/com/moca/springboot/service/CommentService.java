@@ -32,7 +32,6 @@ public class CommentService {
     }
 
     public long deleteComment(long commentId, long userId) {
-
         Comment comment = new Comment();
         comment.setCommentId(commentId);
         if (commentRepository.findById(commentId).get().getUser().getUserId() == userId)

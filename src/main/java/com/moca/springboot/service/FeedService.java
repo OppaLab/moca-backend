@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Service
 public class FeedService {
@@ -46,6 +47,7 @@ public class FeedService {
                     getFeedsAtHomeResponse.setPostBody(post.getPostBody());
                     getFeedsAtHomeResponse.setUserId(post.getUser().getUserId());
                     getFeedsAtHomeResponse.setNickname(post.getUser().getNickname());
+                    getFeedsAtHomeResponse.setProfileImageFilePath(post.getUser().getProfileImageFilePath());
                     // 만들어진 시각부터 지금까지의 시간(초단위)을 보냄
                     getFeedsAtHomeResponse.setCreatedAt((new Date().getTime() - post.getCreatedAt().getTime()) / 1000);
                     getFeedsAtHomeResponse.setThumbnailImageFilePath(post.getThumbnailImageFilePath());
@@ -54,7 +56,8 @@ public class FeedService {
                             getFeedsAtHomeResponse.setLike(Boolean.TRUE));
                     getFeedsAtHomeResponse.setLikeCount(likeRepository.countByPost(post));
                     getFeedsAtHomeResponse.setCommentCount(commentRepository.countByPost(post));
-
+                    getFeedsAtHomeResponse.setCategories(post.getPostCategories().stream().
+                            map(postCategory -> postCategory.getCategoryName()).collect(Collectors.toList()));
                     return getFeedsAtHomeResponse;
                 });
         return feedsAtHomeResponses;

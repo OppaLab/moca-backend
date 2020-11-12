@@ -18,9 +18,9 @@ public class User {
     private Long userId;
     private String nickname;
     private String email;
-
     private Date createdAt;
     private float userSentimentScore;
+    private String profileImageFilePath;
 
     @OneToMany(mappedBy = "user")
     private List<UserCategory> userCategories;
