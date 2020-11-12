@@ -1,5 +1,6 @@
 package com.moca.springboot.entity;
 
+import com.moca.springboot.entity.pk.PostCategoryPK;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
