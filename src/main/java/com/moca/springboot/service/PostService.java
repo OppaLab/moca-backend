@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -50,7 +51,7 @@ public class PostService {
     private String accessKey;
     @Value("${ncp.secretkey}")
     private String secretKey;
-    @Value("${image.basedir}")
+    @Value("${image.thumbnail.basedir}")
     private String basedir;
 
 
@@ -161,6 +162,7 @@ public class PostService {
                     getMyPostsResponse.setPostBody(post.getPostBody());
                     getMyPostsResponse.setUserId(post.getUser().getUserId());
                     getMyPostsResponse.setNickname(post.getUser().getNickname());
+                    getMyPostsResponse.setProfileImageFilePath(post.getUser().getProfileImageFilePath());
                     // 만들어진 시각부터 지금까지의 시간(초단위)을 보냄
                     getMyPostsResponse.setCreatedAt((new Date().getTime() - post.getCreatedAt().getTime()) / 1000);
                     getMyPostsResponse.setThumbnailImageFilePath(post.getThumbnailImageFilePath());
@@ -169,7 +171,8 @@ public class PostService {
                             getMyPostsResponse.setLike(Boolean.TRUE));
                     getMyPostsResponse.setLikeCount(likeRepository.countByPost(post));
                     getMyPostsResponse.setCommentCount(commentRepository.countByPost(post));
-
+                    getMyPostsResponse.setCategories(post.getPostCategories().stream().
+                            map(postCategory -> postCategory.getCategoryName()).collect(Collectors.toList()));
                     return getMyPostsResponse;
                 });
         return getMyPostsResponses;
