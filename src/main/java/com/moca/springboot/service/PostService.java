@@ -50,6 +50,8 @@ public class PostService {
     private String accessKey;
     @Value("${ncp.secretkey}")
     private String secretKey;
+    @Value("${image.basedir}")
+    private String basedir;
 
 
     public long createPost(PostDTO.CreatePostRequest createPostRequest) throws IOException {
@@ -133,21 +135,22 @@ public class PostService {
 //            e.printStackTrace();
 //        }
 //        return endPoint + "/thumbnail-images/" + objectName;
-        String baseUri = "C:\\Users\\jaewa\\IdeaProjects\\MOCA\\src\\main\\resources\\static\\images";
+        // TODO: application.properties의 images.basedir을 배포시 맞게 변경
         UUID uid = UUID.randomUUID();
         String fileExtension = StringUtils.getFilenameExtension(createPostRequest.getThumbnailImageFile().getOriginalFilename());
-        String filePathName = baseUri + File.separator + uid + "." + fileExtension;
+        String fileName = uid + "." + fileExtension;
+        String filePath = basedir + fileName;
         try {
-            createPostRequest.getThumbnailImageFile().transferTo(new File(filePathName));
+            createPostRequest.getThumbnailImageFile().transferTo(new File(filePath));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return uid + "." + fileExtension;
+        return fileName;
     }
 
 
     public Page<PostDTO.GetMyPostsResponse> getMyPosts(long userId, Pageable pageable) {
-        ;
+
         Page<PostDTO.GetMyPostsResponse> getMyPostsResponses;
         Page<Post> posts = postRepository.findByUser(new User(userId), pageable);
         getMyPostsResponses =
@@ -173,8 +176,7 @@ public class PostService {
     }
 
     public Resource getThumbnailImage(String fileName) throws MalformedURLException {
-
-        Path path = Paths.get("C:\\Users\\jaewa\\IdeaProjects\\MOCA\\src\\main\\resources\\static\\images" + File.separator + fileName);
+        Path path = Paths.get(basedir + fileName);
         return new UrlResource(path.toUri());
     }
 }

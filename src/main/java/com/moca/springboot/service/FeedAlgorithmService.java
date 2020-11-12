@@ -33,7 +33,7 @@ public class FeedAlgorithmService {
     @Autowired
     FeedRepository feedRepository;
 
-    // 매일 30분마다 알고리즘 실행
+//     매일 30분마다 알고리즘 실행
     @Scheduled(cron = "0 0/30 * * * *")
     public void runScheduledFeedAlgorithm() {
 

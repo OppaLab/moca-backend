@@ -29,7 +29,6 @@ dependencies {
     implementation 'io.springfox:springfox-swagger-ui:2.9.2'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation("org.springframework.boot:spring-boot-starter-batch")
-//    implementation('org.springframework.boot:spring-boot-starter-data-mongodb')
     compile 'com.google.cloud:google-cloud-language:1.101.3'
     compile 'mysql:mysql-connector-java'
     compileOnly 'org.projectlombok:lombok'
