@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
 @SpringBootApplication
-@PropertySource("key.properties")
 public class SpringbootApplication {
 
     public static void main(String[] args) {

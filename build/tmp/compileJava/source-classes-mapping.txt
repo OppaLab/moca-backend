@@ -1,5 +1,5 @@
-com/moca/springboot/controller/UserController.java
- com.moca.springboot.controller.UserController
+com/moca/springboot/repository/UserRepository.java
+ com.moca.springboot.repository.UserRepository
 com/moca/springboot/service/ReviewService.java
  com.moca.springboot.service.ReviewService
 com/moca/springboot/entity/PostCategory.java
@@ -17,14 +17,17 @@ com/moca/springboot/service/UserService.java
  com.moca.springboot.service.UserService
 com/moca/springboot/config/AsyncConfig.java
  com.moca.springboot.config.AsyncConfig
-com/moca/springboot/controller/PostController.java
- com.moca.springboot.controller.PostController
+com/moca/springboot/SpringbootApplication.java
+ com.moca.springboot.SpringbootApplication
 com/moca/springboot/entity/pk/UserEntityPK.java
  com.moca.springboot.entity.pk.UserEntityPK
 com/moca/springboot/entity/pk/PostCategoryPK.java
  com.moca.springboot.entity.pk.PostCategoryPK
-com/moca/springboot/service/PostService.java
- com.moca.springboot.service.PostService
+com/moca/springboot/dto/PostDTO.java
+ com.moca.springboot.dto.PostDTO
+ com.moca.springboot.dto.PostDTO$CreatePostRequest
+ com.moca.springboot.dto.PostDTO$CreateReviewRequest
+ com.moca.springboot.dto.PostDTO$GetMyPostsResponse
 com/moca/springboot/dto/FeedDTO.java
  com.moca.springboot.dto.FeedDTO
  com.moca.springboot.dto.FeedDTO$GetFeedsAtHomeResponse
@@ -79,8 +82,8 @@ com/moca/springboot/model/Score.java
  com.moca.springboot.model.Score
 com/moca/springboot/repository/PostEntityRepository.java
  com.moca.springboot.repository.PostEntityRepository
-com/moca/springboot/SpringbootApplication.java
- com.moca.springboot.SpringbootApplication
+com/moca/springboot/entity/UserCategory.java
+ com.moca.springboot.entity.UserCategory
 com/moca/springboot/repository/UserEntityRepository.java
  com.moca.springboot.repository.UserEntityRepository
 com/moca/springboot/entity/Feed.java
@@ -93,12 +96,9 @@ com/moca/springboot/dto/LikeDTO.java
  com.moca.springboot.dto.LikeDTO$DeleteLikeRequest
 com/moca/springboot/service/LikeService.java
  com.moca.springboot.service.LikeService
-com/moca/springboot/repository/UserRepository.java
- com.moca.springboot.repository.UserRepository
-com/moca/springboot/dto/PostDTO.java
- com.moca.springboot.dto.PostDTO
- com.moca.springboot.dto.PostDTO$CreatePostRequest
- com.moca.springboot.dto.PostDTO$CreateReviewRequest
- com.moca.springboot.dto.PostDTO$GetMyPostsResponse
-com/moca/springboot/entity/UserCategory.java
- com.moca.springboot.entity.UserCategory
+com/moca/springboot/controller/UserController.java
+ com.moca.springboot.controller.UserController
+com/moca/springboot/controller/PostController.java
+ com.moca.springboot.controller.PostController
+com/moca/springboot/service/PostService.java
+ com.moca.springboot.service.PostService
