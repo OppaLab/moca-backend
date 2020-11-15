@@ -14,8 +14,8 @@ public class LikeDTO {
 
     @Data
     public static class DeleteLikeRequest {
-        private long postId;
-        private long reviewId;
+        private String postId;
+        private String reviewId;
         private long userId;
     }
 

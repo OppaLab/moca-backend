@@ -27,9 +27,12 @@ public class LikeService {
     }
 
     public long deleteLike(LikeDTO.DeleteLikeRequest deleteLikeRequest) {
-        Like like = new Like();
-        like.setUser(new User(deleteLikeRequest.getUserId()));
-        like.setPost(new Post(deleteLikeRequest.getPostId()));
+        Like like = null;
+        if (!deleteLikeRequest.getPostId().isEmpty())
+            like = likeRepository.findByUserAndPost(new User(deleteLikeRequest.getUserId()), new Post(Long.parseLong(deleteLikeRequest.getPostId()))).get();
+        if (!deleteLikeRequest.getReviewId().isEmpty())
+            like = likeRepository.findByUserAndReview(new User(deleteLikeRequest.getUserId()), new Review(Long.parseLong(deleteLikeRequest.getReviewId()))).get();
+
         likeRepository.delete(like);
         return like.getLikeId();
     }
