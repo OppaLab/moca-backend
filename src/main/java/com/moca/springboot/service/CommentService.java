@@ -38,12 +38,12 @@ public class CommentService {
         return comment.getCommentId();
     }
 
-    public Page<CommentDTO.GetCommentsResponse> getComments(Long postId, Long reviewId, Pageable pageable) {
+    public Page<CommentDTO.GetCommentsResponse> getComments(String postId, String reviewId, Pageable pageable) {
         Page<Comment> comments = null;
-        if (postId != null)
-            comments = commentRepository.findByPost(new Post(postId), pageable);
-        if (reviewId != null)
-            comments = commentRepository.findByReview(new Review(reviewId), pageable);
+        if (!postId.isEmpty())
+            comments = commentRepository.findByPost(new Post(Long.parseLong(postId)), pageable);
+        if (!reviewId.isEmpty())
+            comments = commentRepository.findByReview(new Review(Long.parseLong(reviewId)), pageable);
         Page<CommentDTO.GetCommentsResponse> getCommentsResponses = comments.map(comment -> {
             CommentDTO.GetCommentsResponse getCommentsResponse = new CommentDTO.GetCommentsResponse();
             getCommentsResponse.setCommentId(comment.getCommentId());
