@@ -16,7 +16,6 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -138,8 +137,9 @@ private String basedir;
 //        return endPoint + "/thumbnail-images/" + objectName;
         // TODO: application.properties의 images.basedir을 배포시 맞게 변경
         UUID uid = UUID.randomUUID();
-        String fileExtension = StringUtils.getFilenameExtension(createPostRequest.getThumbnailImageFile().getOriginalFilename());
-        String fileName = uid + "." + fileExtension;
+//        String fileExtension = StringUtils.getFilenameExtension(createPostRequest.getThumbnailImageFile().getOriginalFilename());
+//        String fileName = uid + "." + fileExtension;
+        String fileName = uid + ".png";
         String filePath = basedir + fileName;
         try {
             createPostRequest.getThumbnailImageFile().transferTo(new File(filePath));

@@ -155,6 +155,9 @@ public class FeedAlgorithmService {
 
         // minmax 정규화
         for (User user : users) {
+            if (scores.stream().filter(s -> s.getUserId() == user.getUserId()).count() == 0)
+                continue;
+
             float minCategoryScore = scores.stream().filter(s -> s.getUserId() == user.getUserId())
                     .min(Comparator.comparing(Score::getCategoryScore)).get().getCategoryScore();
             float maxCategoryScore = scores.stream().filter(s -> s.getUserId() == user.getUserId())
@@ -230,6 +233,8 @@ public class FeedAlgorithmService {
     }
 
     public void runFeedAlgorithmForNewUser(User user) {
+        if (postRepository.count() == 0)
+            return;
 
         List<Post> posts = postRepository.findAll();
         List<Score> scores = new ArrayList<>();
@@ -295,6 +300,7 @@ public class FeedAlgorithmService {
 
 
         // minmax 정규화
+
         float minCategoryScore = scores.stream()
                 .min(Comparator.comparing(Score::getCategoryScore)).get().getCategoryScore();
         float maxCategoryScore = scores.stream().filter(s -> s.getUserId() == user.getUserId())
