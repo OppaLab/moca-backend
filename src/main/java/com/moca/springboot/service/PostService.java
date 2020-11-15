@@ -4,11 +4,9 @@ package com.moca.springboot.service;
 import com.moca.springboot.dto.PostDTO;
 import com.moca.springboot.entity.Post;
 import com.moca.springboot.entity.PostCategory;
+import com.moca.springboot.entity.Review;
 import com.moca.springboot.entity.User;
-import com.moca.springboot.repository.CommentRepository;
-import com.moca.springboot.repository.LikeRepository;
-import com.moca.springboot.repository.PostCategoryRepository;
-import com.moca.springboot.repository.PostRepository;
+import com.moca.springboot.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -46,12 +44,18 @@ public class PostService {
     @Autowired
     CommentRepository commentRepository;
 
-//    @Value("${ncp.accesskey}")
+    @Autowired
+    ReviewRepository reviewRepository;
+
+    @Autowired
+    FeedRepository feedRepository;
+
+    //    @Value("${ncp.accesskey}")
 //    private String accessKey;
 //    @Value("${ncp.secretkey}")
 //    private String secretKey;
-@Value("${image.thumbnail.basedir}")
-private String basedir;
+    @Value("${image.thumbnail.basedir}")
+    private String basedir;
 
 
     public long createPost(PostDTO.CreatePostRequest createPostRequest) throws IOException {
@@ -81,9 +85,12 @@ private String basedir;
 
     public long deletePost(long postId, long userId) {
         Post post = new Post();
-        post.setPostId(userId);
-        if (postRepository.findById(postId).get().getUser().getUserId() == userId)
+        post.setPostId(postId);
+        if (postRepository.findById(postId).get().getUser().getUserId() == userId) {
+            feedRepository.deleteAllByPost(post);
             postRepository.delete(post);
+        }
+
         return post.getPostId();
     }
 
@@ -182,4 +189,13 @@ private String basedir;
         Path path = Paths.get(basedir + fileName);
         return new UrlResource(path.toUri());
     }
+
+    public long deleteReview(long reviewId, long userId) {
+        Review review = new Review();
+        review.setReviewId(reviewId);
+        if (reviewRepository.findById(reviewId).get().getUser().getUserId() == userId)
+            reviewRepository.delete(review);
+        return reviewId;
+    }
+
 }

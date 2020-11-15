@@ -62,6 +62,12 @@ public class PostController {
         return reviewService.createReview(createReviewRequest);
     }
 
+    @DeleteMapping("/review")
+    public long deleteReview(@RequestParam(value = "reviewId") long reviewId, @RequestParam(value = "userId") long userId) {
+        return postService.deleteReview(reviewId, userId);
+
+    }
+
     @GetMapping("/image/thumbnail/{fileName}")
     public ResponseEntity<Resource> getThumbnailImage(@PathVariable(value = "fileName") String fileName, HttpServletRequest request) throws IOException {
         Resource resource = postService.getThumbnailImage(fileName);

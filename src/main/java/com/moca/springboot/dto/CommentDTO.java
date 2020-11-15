@@ -12,18 +12,16 @@ public class CommentDTO {
         private String comment;
     }
 
-    @Data
-    public static class DeleteCommentRequest {
-        private long commentId;
-        private long userId;
-    }
 
     @Data
-    public static class GetCommentsOnPostResponse {
+    public static class GetCommentsResponse {
         private long userId;
+        private long commentId;
         private String nickname;
+        private String profileImageFilePath;
         private String comment;
         private long createdAt;
     }
+
 }
 

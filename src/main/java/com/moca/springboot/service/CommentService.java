@@ -32,25 +32,31 @@ public class CommentService {
     }
 
     public long deleteComment(long commentId, long userId) {
-        Comment comment = new Comment();
-        comment.setCommentId(commentId);
-        if (commentRepository.findById(commentId).get().getUser().getUserId() == userId)
-            commentRepository.delete(comment);
+        Comment comment = commentRepository.findById(commentId).get();
+        if (comment.getUser().getUserId() == userId)
+            commentRepository.delete(new Comment(commentId));
         return comment.getCommentId();
     }
 
-    public Page<CommentDTO.GetCommentsOnPostResponse> getCommentsOnPost(long postId, Pageable pageable) {
-        Page<Comment> comments = commentRepository.findByPost(new Post(postId), pageable);
-        Page<CommentDTO.GetCommentsOnPostResponse> getCommentsOnPostResponses = comments.map(comment -> {
-            CommentDTO.GetCommentsOnPostResponse getCommentsOnPostResponse = new CommentDTO.GetCommentsOnPostResponse();
-            getCommentsOnPostResponse.setUserId(comment.getUser().getUserId());
-            getCommentsOnPostResponse.setNickname(comment.getUser().getNickname());
-            getCommentsOnPostResponse.setComment(comment.getComment());
+    public Page<CommentDTO.GetCommentsResponse> getComments(Long postId, Long reviewId, Pageable pageable) {
+        Page<Comment> comments = null;
+        if (postId != null)
+            comments = commentRepository.findByPost(new Post(postId), pageable);
+        if (reviewId != null)
+            comments = commentRepository.findByReview(new Review(reviewId), pageable);
+        Page<CommentDTO.GetCommentsResponse> getCommentsResponses = comments.map(comment -> {
+            CommentDTO.GetCommentsResponse getCommentsResponse = new CommentDTO.GetCommentsResponse();
+            getCommentsResponse.setCommentId(comment.getCommentId());
+            getCommentsResponse.setUserId(comment.getUser().getUserId());
+            getCommentsResponse.setNickname(comment.getUser().getNickname());
+            getCommentsResponse.setProfileImageFilePath(comment.getUser().getProfileImageFilePath());
+            getCommentsResponse.setComment(comment.getComment());
             // 댓글 단 시각(몇 분전)을 초단위로 제공
-            getCommentsOnPostResponse.setCreatedAt((new Date().getTime() - comment.getCreatedAt().getTime()) / 1000);
+            getCommentsResponse.setCreatedAt((new Date().getTime() - comment.getCreatedAt().getTime()) / 1000);
 
-            return getCommentsOnPostResponse;
+            return getCommentsResponse;
         });
-        return getCommentsOnPostResponses;
+        return getCommentsResponses;
     }
+
 }

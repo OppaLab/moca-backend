@@ -24,9 +24,10 @@ public class CommentController {
     }
 
     @GetMapping("/comment")
-    public Page<CommentDTO.GetCommentsOnPostResponse> getCommentsOnPost(@RequestParam(value = "postId") long postId,
-                                                                        @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        return commentService.getCommentsOnPost(postId, pageable);
+    public Page<CommentDTO.GetCommentsResponse> getCommentsOnPost(@RequestParam(value = "postId") Long postId, @RequestParam(value = "reviewId") Long reviewId,
+                                                                  @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        System.out.println(postId + " " + reviewId);
+        return commentService.getComments(postId, reviewId, pageable);
     }
 
     @DeleteMapping("/comment")
