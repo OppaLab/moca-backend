@@ -24,9 +24,8 @@ public class CommentController {
     }
 
     @GetMapping("/comment")
-    public Page<CommentDTO.GetCommentsResponse> getCommentsOnPost(@RequestParam(value = "postId") Long postId, @RequestParam(value = "reviewId") Long reviewId,
-                                                                  @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        System.out.println(postId + " " + reviewId);
+    public Page<CommentDTO.GetCommentsResponse> getComments(@RequestParam(value = "postId") Long postId, @RequestParam(value = "reviewId") Long reviewId,
+                                                            @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return commentService.getComments(postId, reviewId, pageable);
     }
 
