@@ -85,18 +85,19 @@ public class NaturalLanguageApiService {
                 userEntity.setUser(user);
                 userEntity.setLfuCount(1);
                 if (userEntities.size() < 20) {
-                    userEntityRepository.save(userEntity);
-                } else {
                     if (userEntityNames.contains(postEntityNames.get(i))) {
                         UserEntity existingUserEntity = userEntityRepository.findByUserAndEntity(user, postEntityNames.get(i));
-                        System.out.println("count up : " + existingUserEntity);
                         existingUserEntity.setLfuCount(existingUserEntity.getLfuCount() + 1);
                         userEntityRepository.save(existingUserEntity);
                     } else {
-                        System.out.println("delete: " + userEntities.stream().
-                                min(Comparator.comparing(UserEntity::getLfuCount).
-                                        thenComparing(UserEntity::getTimeStamp)).get());
-
+                        userEntityRepository.save(userEntity);
+                    }
+                } else {
+                    if (userEntityNames.contains(postEntityNames.get(i))) {
+                        UserEntity existingUserEntity = userEntityRepository.findByUserAndEntity(user, postEntityNames.get(i));
+                        existingUserEntity.setLfuCount(existingUserEntity.getLfuCount() + 1);
+                        userEntityRepository.save(existingUserEntity);
+                    } else {
                         userEntityRepository.delete(userEntities.stream().
                                 min(Comparator.comparing(UserEntity::getLfuCount).
                                         thenComparing(UserEntity::getTimeStamp)).get());
