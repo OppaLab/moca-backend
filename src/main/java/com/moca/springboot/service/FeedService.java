@@ -58,6 +58,8 @@ public class FeedService {
                     getFeedsAtHomeResponse.setCommentCount(commentRepository.countByPost(post));
                     getFeedsAtHomeResponse.setCategories(post.getPostCategories().stream().
                             map(postCategory -> postCategory.getCategoryName()).collect(Collectors.toList()));
+                    if (post.getReview() != null)
+                        getFeedsAtHomeResponse.setReviewId(post.getReview().getReviewId());
                     return getFeedsAtHomeResponse;
                 });
         return feedsAtHomeResponses;

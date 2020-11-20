@@ -102,6 +102,12 @@ public class NaturalLanguageApiService {
                                 min(Comparator.comparing(UserEntity::getLfuCount).
                                         thenComparing(UserEntity::getTimeStamp)).get());
                         userEntityRepository.save(userEntity);
+//                        //TODO: user entity가 압도적으로 많은 것에 대한 견제장치(시간이 오래되면 lfu count가 높아도 decay된다.
+//                        UserEntity existingUserEntity = userEntities.stream().
+//                                max(Comparator.comparing(UserEntity::getTimeStamp).
+//                                        thenComparing(UserEntity::getLfuCount)).get();
+//                        existingUserEntity.setLfuCount(existingUserEntity.getLfuCount() - 1);
+//                        userEntityRepository.save(existingUserEntity);
                     }
                 }
 

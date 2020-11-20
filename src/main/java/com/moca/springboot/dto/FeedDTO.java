@@ -21,6 +21,7 @@ public class FeedDTO {
         private String thumbnailImageFilePath;
         private long createdAt;
         private List<String> categories;
+        private Long reviewId;
     }
 
 

@@ -2,7 +2,6 @@ package com.moca.springboot.controller;
 
 import com.moca.springboot.dto.FeedDTO;
 import com.moca.springboot.dto.PostDTO;
-import com.moca.springboot.repository.PostRepository;
 import com.moca.springboot.service.FeedService;
 import com.moca.springboot.service.PostService;
 import com.moca.springboot.service.ReviewService;
@@ -21,8 +20,6 @@ import java.io.IOException;
 
 @RestController
 public class PostController {
-    @Autowired
-    private PostRepository postRepository;
 
     @Autowired
     private PostService postService;
@@ -40,9 +37,10 @@ public class PostController {
     }
 
     @GetMapping("/post")
-    public Page<PostDTO.GetMyPostsResponse> getMyPosts(@RequestParam(value = "userId") long userId,
-                                                       @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        return postService.getMyPosts(userId, pageable);
+    public Page<PostDTO.GetPostsResponse> getMyPosts(@RequestParam(value = "userId") long userId,
+                                                     @RequestParam(value = "category", required = false) String category,
+                                                     @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return postService.getPosts(userId, category, pageable);
     }
 
     @PostMapping("/post")
@@ -56,6 +54,7 @@ public class PostController {
         postService.deletePost(postId, userId);
         return postId;
     }
+
 
     @PostMapping("/review")
     public long createReview(PostDTO.CreateReviewRequest createReviewRequest) {

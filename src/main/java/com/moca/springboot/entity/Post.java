@@ -38,7 +38,6 @@ public class Post {
 
     @OneToMany(mappedBy = "post")
     private List<PostCategory> postCategories = new ArrayList<>(0);
-    ;
 
     @OneToMany(mappedBy = "post")
     private List<Like> likes;

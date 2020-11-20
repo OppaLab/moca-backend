@@ -18,4 +18,24 @@ public class UserDTO {
         private long userId;
         private MultipartFile profileImageFile;
     }
+
+    @Data
+    public static class SignInRequest {
+        private String email;
+    }
+
+    @Data
+    public static class FollowRequest {
+        private long userId;
+        private long followedUserId;
+    }
+
+    @Data
+    public static class GetProfileResponse {
+        private String nickname;
+        private String profileImageFilePath;
+        private long numberOfPosts;
+        private long numberOfFollowers;
+        private long numberOfFollowings;
+    }
 }
