@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -38,9 +35,29 @@ public class UserController {
         return userId;
     }
 
-    @PostMapping("/profileImage")
+    @PostMapping("/signin")
+    public Long signIn(UserDTO.SignInRequest signInRequest) {
+        return userService.signIn(signInRequest);
+    }
+
+    @PostMapping("/image/profile")
     public String setProfileImage(UserDTO.SetProfileImageRequest setProfileImageRequest) {
         return userService.setProfileImage(setProfileImageRequest);
+    }
+
+    @PostMapping("/follow")
+    public Long followUser(UserDTO.FollowRequest followRequest) {
+        return userService.followUser(followRequest);
+    }
+
+    @DeleteMapping("/unfollow")
+    public Long unfollowUser(@RequestParam(value = "userId") long userId, @RequestParam(value = "followedUserId") long followedUserId) {
+        return userService.unfollowUser(userId, followedUserId);
+    }
+
+    @GetMapping("/profile")
+    public UserDTO.GetProfileResponse getProfile(@RequestParam(value = "userId") long userId) {
+        return userService.getProfile(userId);
     }
 
     @GetMapping("/image/profile/{fileName}")

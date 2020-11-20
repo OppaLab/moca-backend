@@ -24,7 +24,7 @@ public class CommentController {
     }
 
     @GetMapping("/comment")
-    public Page<CommentDTO.GetCommentsResponse> getComments(@RequestParam(value = "postId") String postId, @RequestParam(value = "reviewId") String reviewId,
+    public Page<CommentDTO.GetCommentsResponse> getComments(@RequestParam(value = "postId", required = false) String postId, @RequestParam(value = "reviewId", required = false) String reviewId,
                                                             @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return commentService.getComments(postId, reviewId, pageable);
     }

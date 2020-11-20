@@ -157,32 +157,40 @@ public class PostService {
     }
 
 
-    public Page<PostDTO.GetMyPostsResponse> getMyPosts(long userId, Pageable pageable) {
+    public Page<PostDTO.GetPostsResponse> getPosts(long userId, String category, Pageable pageable) {
+        Page<PostDTO.GetPostsResponse> getPostsResponses;
+        Page<Post> posts;
+        if (category.isEmpty())
+            posts = postRepository.findByUser(new User(userId), pageable);
+        else
+            posts = postRepository.findByPostCategoriesCategoryName(category, pageable);
 
-        Page<PostDTO.GetMyPostsResponse> getMyPostsResponses;
-        Page<Post> posts = postRepository.findByUser(new User(userId), pageable);
-        getMyPostsResponses =
+
+        getPostsResponses =
                 posts.map(post -> {
-                    PostDTO.GetMyPostsResponse getMyPostsResponse = new PostDTO.GetMyPostsResponse();
-                    getMyPostsResponse.setPostId(post.getPostId());
-                    getMyPostsResponse.setPostTitle(post.getPostTitle());
-                    getMyPostsResponse.setPostBody(post.getPostBody());
-                    getMyPostsResponse.setUserId(post.getUser().getUserId());
-                    getMyPostsResponse.setNickname(post.getUser().getNickname());
-                    getMyPostsResponse.setProfileImageFilePath(post.getUser().getProfileImageFilePath());
+                    PostDTO.GetPostsResponse getPostsResponse = new PostDTO.GetPostsResponse();
+                    getPostsResponse.setPostId(post.getPostId());
+                    getPostsResponse.setPostTitle(post.getPostTitle());
+                    getPostsResponse.setPostBody(post.getPostBody());
+                    getPostsResponse.setUserId(post.getUser().getUserId());
+                    getPostsResponse.setNickname(post.getUser().getNickname());
+                    getPostsResponse.setProfileImageFilePath(post.getUser().getProfileImageFilePath());
                     // 만들어진 시각부터 지금까지의 시간(초단위)을 보냄
-                    getMyPostsResponse.setCreatedAt((new Date().getTime() - post.getCreatedAt().getTime()) / 1000);
-                    getMyPostsResponse.setThumbnailImageFilePath(post.getThumbnailImageFilePath());
-                    getMyPostsResponse.setLike(Boolean.FALSE);
+                    getPostsResponse.setCreatedAt((new Date().getTime() - post.getCreatedAt().getTime()) / 1000);
+                    getPostsResponse.setThumbnailImageFilePath(post.getThumbnailImageFilePath());
+                    getPostsResponse.setLike(Boolean.FALSE);
                     likeRepository.findByUserAndPost(new User(userId), post).ifPresent(action ->
-                            getMyPostsResponse.setLike(Boolean.TRUE));
-                    getMyPostsResponse.setLikeCount(likeRepository.countByPost(post));
-                    getMyPostsResponse.setCommentCount(commentRepository.countByPost(post));
-                    getMyPostsResponse.setCategories(post.getPostCategories().stream().
+                            getPostsResponse.setLike(Boolean.TRUE));
+                    getPostsResponse.setLikeCount(likeRepository.countByPost(post));
+                    getPostsResponse.setCommentCount(commentRepository.countByPost(post));
+                    getPostsResponse.setCategories(post.getPostCategories().stream().
                             map(postCategory -> postCategory.getCategoryName()).collect(Collectors.toList()));
-                    return getMyPostsResponse;
+                    if (post.getReview() != null)
+                        getPostsResponse.setReviewId(post.getReview().getReviewId());
+
+                    return getPostsResponse;
                 });
-        return getMyPostsResponses;
+        return getPostsResponses;
     }
 
     public Resource getThumbnailImage(String fileName) throws MalformedURLException {

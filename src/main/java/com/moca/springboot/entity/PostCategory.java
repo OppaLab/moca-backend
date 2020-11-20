@@ -23,4 +23,6 @@ public class PostCategory implements Serializable {
     @JoinColumn(name = "postId")
     @ManyToOne
     private Post post;
+
+
 }

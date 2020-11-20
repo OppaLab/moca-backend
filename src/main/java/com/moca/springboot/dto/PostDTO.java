@@ -18,7 +18,7 @@ public class PostDTO {
     }
 
     @Data
-    public static class GetMyPostsResponse {
+    public static class GetPostsResponse {
         private long likeCount;
         private long commentCount;
         private Boolean like;
@@ -31,15 +31,32 @@ public class PostDTO {
         private String thumbnailImageFilePath;
         private long createdAt;
         private List<String> categories;
+        private Long reviewId;
     }
 
     @Data
-    public class CreateReviewRequest {
+    public static class CreateReviewRequest {
         private long postId;
         private long userId;
         private String review;
     }
 
+//    @Data
+//    public static class GetPostsInCategoryResponse {
+//        private long likeCount;
+//        private long commentCount;
+//        private Boolean like;
+//        private long postId;
+//        private long userId;
+//        private String nickname;
+//        private String profileImageFilePath;
+//        private String postTitle;
+//        private String postBody;
+//        private String thumbnailImageFilePath;
+//        private long createdAt;
+//        private List<String> categories;
+//        private Long reviewId;
+//    }
 }
 
 

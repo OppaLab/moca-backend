@@ -1,8 +1,11 @@
 package com.moca.springboot.service;
 
 import com.moca.springboot.dto.UserDTO;
+import com.moca.springboot.entity.Follow;
 import com.moca.springboot.entity.User;
 import com.moca.springboot.entity.UserCategory;
+import com.moca.springboot.repository.FollowRepository;
+import com.moca.springboot.repository.PostRepository;
 import com.moca.springboot.repository.UserCategoryRepository;
 import com.moca.springboot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -27,7 +31,12 @@ public class UserService {
     @Autowired
     private UserCategoryRepository userCategoryRepository;
     @Autowired
+    private FollowRepository followRepository;
+    @Autowired
+    private PostRepository postRepository;
+    @Autowired
     private FeedAlgorithmService feedAlgorithmService;
+
     @Value("${image.profile.basedir}")
     private String basedir;
 
@@ -84,5 +93,35 @@ public class UserService {
     public Resource getProfileImage(String fileName) throws MalformedURLException {
         Path path = Paths.get(basedir + fileName);
         return new UrlResource(path.toUri());
+    }
+
+    public Long signIn(UserDTO.SignInRequest signInRequest) {
+        Optional<User> user = userRepository.findByEmail(signInRequest.getEmail());
+        if (user.isPresent())
+            return userRepository.findByEmail(signInRequest.getEmail()).get().getUserId();
+        else
+            return null;
+    }
+
+    public Long followUser(UserDTO.FollowRequest followRequest) {
+        followRepository.save(new Follow(new User(followRequest.getUserId()), new User(followRequest.getFollowedUserId())));
+        return followRequest.getUserId();
+    }
+
+    public Long unfollowUser(long userId, long followedUserId) {
+        followRepository.delete(new Follow(new User(userId), new User(followedUserId)));
+        return userId;
+    }
+
+    public UserDTO.GetProfileResponse getProfile(long userId) {
+        UserDTO.GetProfileResponse getProfileResponse = new UserDTO.GetProfileResponse();
+        User user = userRepository.findById(userId).get();
+        getProfileResponse.setNickname(user.getNickname());
+        getProfileResponse.setProfileImageFilePath(user.getProfileImageFilePath());
+        getProfileResponse.setNumberOfPosts(postRepository.countByUser(user));
+        getProfileResponse.setNumberOfFollowers(followRepository.countByFollowedUser(user));
+        getProfileResponse.setNumberOfFollowings(followRepository.countByUser(user));
+
+        return getProfileResponse;
     }
 }
