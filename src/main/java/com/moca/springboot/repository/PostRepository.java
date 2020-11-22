@@ -10,7 +10,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByUser(User user, Pageable pageable);
 
-    Page<Post> findByPostCategoriesCategoryName(String category, Pageable pageable);
 
     long countByUser(User user);
+
+
+    Page<Post> findByPostCategoriesCategoryName(String category, Pageable pageable);
+
+    Page<Post> findByPostTitleContainingOrPostBodyContaining(String search, String search1, Pageable pageable);
 }

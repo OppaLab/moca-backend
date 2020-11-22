@@ -12,11 +12,5 @@ public class LikeDTO {
         private long userId;
     }
 
-    @Data
-    public static class DeleteLikeRequest {
-        private String postId;
-        private String reviewId;
-        private long userId;
-    }
 
 }

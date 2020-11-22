@@ -41,6 +41,19 @@ public class PostDTO {
         private String review;
     }
 
+    @Data
+    public static class GetReviewResponse {
+        private long likeCount;
+        private long commentCount;
+        private Boolean like;
+        private long userId;
+        private String nickname;
+        private String profileImageFilePath;
+        private String review;
+        private long createdAt;
+    }
+
+
 //    @Data
 //    public static class GetPostsInCategoryResponse {
 //        private long likeCount;
