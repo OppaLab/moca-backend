@@ -1,9 +1,8 @@
 package com.moca.springboot.service;
 
 import com.moca.springboot.dto.PostDTO;
-import com.moca.springboot.entity.Post;
-import com.moca.springboot.entity.Review;
-import com.moca.springboot.entity.User;
+import com.moca.springboot.entity.*;
+import com.moca.springboot.repository.ActivityRepository;
 import com.moca.springboot.repository.CommentRepository;
 import com.moca.springboot.repository.LikeRepository;
 import com.moca.springboot.repository.ReviewRepository;
@@ -11,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class ReviewService {
@@ -24,13 +24,27 @@ public class ReviewService {
     @Autowired
     private LikeRepository likeRepository;
 
+    @Autowired
+    private ActivityRepository activityRepository;
+
     public long createReview(PostDTO.CreateReviewRequest createReviewRequest) {
         Review review = new Review();
         review.setPost(new Post(createReviewRequest.getPostId()));
         review.setUser(new User(createReviewRequest.getUserId()));
         review.setReview(createReviewRequest.getReview());
 
-        return reviewRepository.save(review).getReviewId();
+        Review newReview = reviewRepository.save(review);
+        List<Like> likes = likeRepository.findByPost(newReview.getPost());
+        for (Like like : likes) {
+            Activity activity = new Activity();
+            activity.setUser(newReview.getUser());
+            activity.setToUser(like.getUser());
+            activity.setActivity("review");
+            activity.setReview(newReview);
+            activityRepository.save(activity);
+        }
+
+        return newReview.getReviewId();
     }
 
 

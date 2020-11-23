@@ -33,16 +33,17 @@ public class PostController {
     @GetMapping("/feed")
     public Page<FeedDTO.GetFeedsAtHomeResponse> getFeedsAtHome(@RequestParam(value = "userId") long userId,
                                                                @PageableDefault(size = 30, sort = "score", direction = Sort.Direction.DESC) Pageable pageable) {
-        return feedService.feed(userId, pageable);
+        return feedService.getfeedsAtHome(userId, pageable);
     }
 
     @GetMapping("/post")
     public Page<PostDTO.GetPostsResponse> getPosts(@RequestParam(value = "userId") long userId,
+                                                   @RequestParam(value = "postId", required = false) Long postId,
                                                    @RequestParam(value = "search") String search,
-                                                   @RequestParam(value = "category", required = false) String category,
+                                                   @RequestParam(value = "category") String category,
                                                    @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        System.out.println(pageable);
-        return postService.getPosts(userId, search, category, pageable);
+
+        return postService.getPosts(userId, postId, search, category, pageable);
     }
 
     @PostMapping("/post")

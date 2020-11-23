@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -34,6 +35,9 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "postId")
     private Post post;
+
+    @OneToMany(mappedBy = "comment")
+    private List<Comment> comments;
 
 }
 

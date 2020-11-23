@@ -1,12 +1,11 @@
 package com.moca.springboot.service;
 
 import com.moca.springboot.dto.CommentDTO;
-import com.moca.springboot.entity.Comment;
-import com.moca.springboot.entity.Post;
-import com.moca.springboot.entity.Review;
-import com.moca.springboot.entity.User;
+import com.moca.springboot.entity.*;
+import com.moca.springboot.repository.ActivityRepository;
 import com.moca.springboot.repository.CommentRepository;
 import com.moca.springboot.repository.PostRepository;
+import com.moca.springboot.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,20 +20,41 @@ public class CommentService {
     private CommentRepository commentRepository;
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private ActivityRepository activityRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     public long createComment(CommentDTO.CreateCommentRequest createCommentRequest) {
         Comment comment = new Comment();
+
+        Activity activity = new Activity();
+        activity.setUser(new User(createCommentRequest.getUserId()));
+
         if (!createCommentRequest.getPostId().isEmpty()) {
             comment.setPost(new Post(Long.parseLong(createCommentRequest.getPostId())));
             Post post = postRepository.findById(Long.parseLong(createCommentRequest.getPostId())).get();
             post.setCommentCount(post.getCommentCount() + 1);
             postRepository.save(post);
+
+            activity.setToUser(post.getUser());
+            activity.setActivity("comment");
+            activity.setPost(post);
+
         }
-        if (!createCommentRequest.getReviewId().isEmpty())
+        if (!createCommentRequest.getReviewId().isEmpty()) {
             comment.setReview(new Review(Long.parseLong(createCommentRequest.getReviewId())));
+            Review review = reviewRepository.findById(Long.parseLong(createCommentRequest.getReviewId())).get();
+            activity.setToUser(review.getUser());
+            activity.setActivity("comment");
+            activity.setReview(review);
+        }
+
         comment.setUser(new User(createCommentRequest.getUserId()));
         comment.setComment(createCommentRequest.getComment());
         Comment newComment = commentRepository.save(comment);
+        activity.setComment(newComment);
+        activityRepository.save(activity);
 
         return newComment.getCommentId();
     }

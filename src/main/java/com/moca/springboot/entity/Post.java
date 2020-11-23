@@ -53,4 +53,7 @@ public class Post {
     @OneToOne(mappedBy = "post")
     private Review review;
 
+    @OneToMany(mappedBy = "post")
+    private List<Activity> activities;
+
 }

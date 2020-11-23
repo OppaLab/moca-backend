@@ -2,10 +2,7 @@ package com.moca.springboot.service;
 
 
 import com.moca.springboot.dto.PostDTO;
-import com.moca.springboot.entity.Post;
-import com.moca.springboot.entity.PostCategory;
-import com.moca.springboot.entity.Review;
-import com.moca.springboot.entity.User;
+import com.moca.springboot.entity.*;
 import com.moca.springboot.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,6 +49,12 @@ public class PostService {
     @Autowired
     FeedRepository feedRepository;
 
+    @Autowired
+    FollowRepository followRepository;
+
+    @Autowired
+    ActivityRepository activityRepository;
+
     //    @Value("${ncp.accesskey}")
 //    private String accessKey;
 //    @Value("${ncp.secretkey}")
@@ -67,8 +70,7 @@ public class PostService {
         post.setPostBody(createPostRequest.getPostBody());
         post.setThumbnailImageFilePath(createPostRequest.getThumbnailImageFilePathName());
 //        post.setCreatedAt(LocalDateTime.now());
-        User user = new User();
-        user.setUserId(createPostRequest.getUserId());
+        User user = new User(createPostRequest.getUserId());
         post.setUser(user);
 
         List<PostCategory> postCategory = new ArrayList<>();
@@ -78,6 +80,16 @@ public class PostService {
         }
         Post newPost = postRepository.save(post);
         postCategoryRepository.saveAll(postCategory);
+
+        List<Follow> follows = followRepository.findByFollowedUser(user);
+        for (Follow follow : follows) {
+            Activity activity = new Activity();
+            activity.setUser(follow.getFollowedUser());
+            activity.setToUser(follow.getUser());
+            activity.setActivity("post");
+            activity.setPost(newPost);
+            activityRepository.save(activity);
+        }
 
         // async 로 일단 post id를 돌려주고 감정분석 및 정량화 실행
         naturalLanguageApiService.naturalLanguageApi(createPostRequest, newPost);
@@ -159,31 +171,39 @@ public class PostService {
     }
 
 
-    public Page<PostDTO.GetPostsResponse> getPosts(long userId, String search, String category, Pageable pageable) {
+    public Page<PostDTO.GetPostsResponse> getPosts(long userId, Long postId, String search, String category, Pageable pageable) {
         Page<PostDTO.GetPostsResponse> getPostsResponses;
         Page<Post> posts;
 
-        // 검색어 입력
-        if (!search.isEmpty()) {
-            String sort = null;
-            for (Sort.Order order : pageable.getSort())
-                sort = order.getProperty();
-            PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.DESC, sort);
-            posts = postRepository.findByPostTitleContainingOrPostBodyContaining(search, search, pageRequest);
-        } else {
-            // 내 게시글 가져오기
-            if (category.isEmpty())
-                posts = postRepository.findByUser(new User(userId), pageable);
-                // 카테고리 입력
-            else {
-                String sort = null;
-                for (Sort.Order order : pageable.getSort())
-                    sort = order.getProperty();
-                PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.DESC, sort);
-                posts = postRepository.findByPostCategoriesCategoryName(category, pageRequest);
+        if (postId == null) {
+            // 검색어 입력
+            if (!search.isEmpty()) {
+                // 검색창 default feeds
+                if (search.equals("DEFAULT"))
+                    posts = postRepository.findByUserNot(new User(userId), pageable);
+                else {
+                    String sort = null;
+                    for (Sort.Order order : pageable.getSort())
+                        sort = order.getProperty();
+                    PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.DESC, sort);
+                    posts = postRepository.findByPostTitleContainingOrPostBodyContaining(search, search, pageRequest);
+                }
+            } else {
+                // 내 게시글 가져오기
+                if (category.isEmpty())
+                    posts = postRepository.findByUser(new User(userId), pageable);
+                    // 카테고리 입력
+                else {
+                    String sort = null;
+                    for (Sort.Order order : pageable.getSort())
+                        sort = order.getProperty();
+                    PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.DESC, sort);
+                    posts = postRepository.findByPostCategoriesCategoryName(category, pageRequest);
+                }
             }
+        } else {
+            posts = postRepository.findByPostId(postId, pageable);
         }
-
 
         getPostsResponses =
                 posts.map(post -> {
@@ -202,8 +222,6 @@ public class PostService {
                             getPostsResponse.setLike(Boolean.TRUE));
                     getPostsResponse.setLikeCount(post.getLikeCount());
                     getPostsResponse.setCommentCount(post.getCommentCount());
-//                    getPostsResponse.setLikeCount(likeRepository.countByPost(post));
-//                    getPostsResponse.setCommentCount(commentRepository.countByPost(post));
                     getPostsResponse.setCategories(post.getPostCategories().stream().
                             map(postCategory -> postCategory.getCategoryName()).collect(Collectors.toList()));
                     if (post.getReview() != null)
