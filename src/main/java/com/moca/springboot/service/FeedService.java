@@ -54,8 +54,10 @@ public class FeedService {
                     getFeedsAtHomeResponse.setLike(Boolean.FALSE);
                     likeRepository.findByUserAndPost(new User(userId), post).ifPresent(action ->
                             getFeedsAtHomeResponse.setLike(Boolean.TRUE));
-                    getFeedsAtHomeResponse.setLikeCount(likeRepository.countByPost(post));
-                    getFeedsAtHomeResponse.setCommentCount(commentRepository.countByPost(post));
+                    getFeedsAtHomeResponse.setLikeCount(post.getLikeCount());
+                    getFeedsAtHomeResponse.setCommentCount(post.getCommentCount());
+//                    getFeedsAtHomeResponse.setLikeCount(likeRepository.countByPost(post));
+//                    getFeedsAtHomeResponse.setCommentCount(commentRepository.countByPost(post));
                     getFeedsAtHomeResponse.setCategories(post.getPostCategories().stream().
                             map(postCategory -> postCategory.getCategoryName()).collect(Collectors.toList()));
                     if (post.getReview() != null)

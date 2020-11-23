@@ -26,6 +26,8 @@ public class Post {
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
     private Date createdAt;
+    private long likeCount;
+    private long commentCount;
 
     @ManyToOne
     @JoinColumn(name = "userId")

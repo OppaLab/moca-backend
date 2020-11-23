@@ -22,6 +22,7 @@ public class FeedDTO {
         private long createdAt;
         private List<String> categories;
         private Long reviewId;
+
     }
 
 

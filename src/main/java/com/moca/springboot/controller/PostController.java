@@ -32,15 +32,17 @@ public class PostController {
 
     @GetMapping("/feed")
     public Page<FeedDTO.GetFeedsAtHomeResponse> getFeedsAtHome(@RequestParam(value = "userId") long userId,
-                                                               @PageableDefault(size = 10, sort = "score", direction = Sort.Direction.DESC) Pageable pageable) {
+                                                               @PageableDefault(size = 30, sort = "score", direction = Sort.Direction.DESC) Pageable pageable) {
         return feedService.feed(userId, pageable);
     }
 
     @GetMapping("/post")
-    public Page<PostDTO.GetPostsResponse> getMyPosts(@RequestParam(value = "userId") long userId,
-                                                     @RequestParam(value = "category", required = false) String category,
-                                                     @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        return postService.getPosts(userId, category, pageable);
+    public Page<PostDTO.GetPostsResponse> getPosts(@RequestParam(value = "userId") long userId,
+                                                   @RequestParam(value = "search") String search,
+                                                   @RequestParam(value = "category", required = false) String category,
+                                                   @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        System.out.println(pageable);
+        return postService.getPosts(userId, search, category, pageable);
     }
 
     @PostMapping("/post")
@@ -55,6 +57,11 @@ public class PostController {
         return postId;
     }
 
+    @GetMapping("/review")
+    public PostDTO.GetReviewResponse getReview(@RequestParam(value = "userId") long userId, @RequestParam(value = "reviewId") long reviewId) {
+        return reviewService.getReview(userId, reviewId);
+    }
+
 
     @PostMapping("/review")
     public long createReview(PostDTO.CreateReviewRequest createReviewRequest) {
@@ -64,7 +71,6 @@ public class PostController {
     @DeleteMapping("/review")
     public long deleteReview(@RequestParam(value = "reviewId") long reviewId, @RequestParam(value = "userId") long userId) {
         return postService.deleteReview(reviewId, userId);
-
     }
 
     @GetMapping("/image/thumbnail/{fileName}")

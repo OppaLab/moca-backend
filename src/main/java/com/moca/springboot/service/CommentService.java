@@ -6,6 +6,7 @@ import com.moca.springboot.entity.Post;
 import com.moca.springboot.entity.Review;
 import com.moca.springboot.entity.User;
 import com.moca.springboot.repository.CommentRepository;
+import com.moca.springboot.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,16 +19,23 @@ public class CommentService {
 
     @Autowired
     private CommentRepository commentRepository;
+    @Autowired
+    private PostRepository postRepository;
 
     public long createComment(CommentDTO.CreateCommentRequest createCommentRequest) {
         Comment comment = new Comment();
-        if (!createCommentRequest.getPostId().isEmpty())
+        if (!createCommentRequest.getPostId().isEmpty()) {
             comment.setPost(new Post(Long.parseLong(createCommentRequest.getPostId())));
+            Post post = postRepository.findById(Long.parseLong(createCommentRequest.getPostId())).get();
+            post.setCommentCount(post.getCommentCount() + 1);
+            postRepository.save(post);
+        }
         if (!createCommentRequest.getReviewId().isEmpty())
             comment.setReview(new Review(Long.parseLong(createCommentRequest.getReviewId())));
         comment.setUser(new User(createCommentRequest.getUserId()));
         comment.setComment(createCommentRequest.getComment());
         Comment newComment = commentRepository.save(comment);
+
         return newComment.getCommentId();
     }
 
@@ -35,6 +43,15 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId).get();
         if (comment.getUser().getUserId() == userId)
             commentRepository.delete(new Comment(commentId));
+        if (comment.getPost() != null) {
+            Post post = postRepository.findById(comment.getPost().getPostId()).get();
+            post.setCommentCount(post.getCommentCount() - 1);
+            postRepository.save(post);
+        }
+        if (comment.getReview() != null) {
+
+        }
+
         return comment.getCommentId();
     }
 

@@ -5,6 +5,7 @@ import com.moca.springboot.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -21,8 +22,8 @@ public class LikeController {
     }
 
     @DeleteMapping("/unlike")
-    public Long unlikePost(LikeDTO.DeleteLikeRequest deleteLikeRequest) {
-        Long likeId = likeService.deleteLike(deleteLikeRequest);
+    public Long unlikePost(@RequestParam(value = "postId") String postId, @RequestParam(value = "reviewId") String reviewId, @RequestParam(value = "userId") long userId) {
+        Long likeId = likeService.deleteLike(postId, reviewId, userId);
         return likeId;
     }
 

@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -157,13 +159,30 @@ public class PostService {
     }
 
 
-    public Page<PostDTO.GetPostsResponse> getPosts(long userId, String category, Pageable pageable) {
+    public Page<PostDTO.GetPostsResponse> getPosts(long userId, String search, String category, Pageable pageable) {
         Page<PostDTO.GetPostsResponse> getPostsResponses;
         Page<Post> posts;
-        if (category.isEmpty())
-            posts = postRepository.findByUser(new User(userId), pageable);
-        else
-            posts = postRepository.findByPostCategoriesCategoryName(category, pageable);
+
+        // 검색어 입력
+        if (!search.isEmpty()) {
+            String sort = null;
+            for (Sort.Order order : pageable.getSort())
+                sort = order.getProperty();
+            PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.DESC, sort);
+            posts = postRepository.findByPostTitleContainingOrPostBodyContaining(search, search, pageRequest);
+        } else {
+            // 내 게시글 가져오기
+            if (category.isEmpty())
+                posts = postRepository.findByUser(new User(userId), pageable);
+                // 카테고리 입력
+            else {
+                String sort = null;
+                for (Sort.Order order : pageable.getSort())
+                    sort = order.getProperty();
+                PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.DESC, sort);
+                posts = postRepository.findByPostCategoriesCategoryName(category, pageRequest);
+            }
+        }
 
 
         getPostsResponses =
@@ -181,8 +200,10 @@ public class PostService {
                     getPostsResponse.setLike(Boolean.FALSE);
                     likeRepository.findByUserAndPost(new User(userId), post).ifPresent(action ->
                             getPostsResponse.setLike(Boolean.TRUE));
-                    getPostsResponse.setLikeCount(likeRepository.countByPost(post));
-                    getPostsResponse.setCommentCount(commentRepository.countByPost(post));
+                    getPostsResponse.setLikeCount(post.getLikeCount());
+                    getPostsResponse.setCommentCount(post.getCommentCount());
+//                    getPostsResponse.setLikeCount(likeRepository.countByPost(post));
+//                    getPostsResponse.setCommentCount(commentRepository.countByPost(post));
                     getPostsResponse.setCategories(post.getPostCategories().stream().
                             map(postCategory -> postCategory.getCategoryName()).collect(Collectors.toList()));
                     if (post.getReview() != null)
