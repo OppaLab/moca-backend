@@ -6,6 +6,7 @@ import com.moca.springboot.entity.Review;
 import com.moca.springboot.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
@@ -16,4 +17,6 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
     Optional<Like> findByUserAndReview(User user, Review review);
 
     long countByReview(Review review);
+
+    List<Like> findByPost(Post post);
 }

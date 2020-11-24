@@ -5,8 +5,12 @@ import com.moca.springboot.entity.User;
 import com.moca.springboot.entity.pk.FollowPK;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface FollowRepository extends JpaRepository<Follow, FollowPK> {
     long countByFollowedUser(User followedUser);
 
     long countByUser(User user);
+
+    List<Follow> findByFollowedUser(User user);
 }

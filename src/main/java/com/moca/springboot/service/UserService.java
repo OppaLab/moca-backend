@@ -1,13 +1,11 @@
 package com.moca.springboot.service;
 
 import com.moca.springboot.dto.UserDTO;
+import com.moca.springboot.entity.Activity;
 import com.moca.springboot.entity.Follow;
 import com.moca.springboot.entity.User;
 import com.moca.springboot.entity.UserCategory;
-import com.moca.springboot.repository.FollowRepository;
-import com.moca.springboot.repository.PostRepository;
-import com.moca.springboot.repository.UserCategoryRepository;
-import com.moca.springboot.repository.UserRepository;
+import com.moca.springboot.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -35,7 +33,10 @@ public class UserService {
     @Autowired
     private PostRepository postRepository;
     @Autowired
+    private ActivityRepository activityRepository;
+    @Autowired
     private FeedAlgorithmService feedAlgorithmService;
+
 
     @Value("${image.profile.basedir}")
     private String basedir;
@@ -105,6 +106,13 @@ public class UserService {
 
     public Long followUser(UserDTO.FollowRequest followRequest) {
         followRepository.save(new Follow(new User(followRequest.getUserId()), new User(followRequest.getFollowedUserId())));
+
+        Activity activity = new Activity();
+        activity.setUser(new User(followRequest.getUserId()));
+        activity.setToUser(new User(followRequest.getFollowedUserId()));
+        activity.setActivity("follow");
+        activityRepository.save(activity);
+
         return followRequest.getUserId();
     }
 

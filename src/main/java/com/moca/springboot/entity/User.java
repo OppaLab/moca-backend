@@ -44,9 +44,15 @@ public class User {
     private List<Like> likes;
 
     @OneToMany(mappedBy = "user")
-    private List<Follow> follows;
+    private List<Follow> follow;
 
     @OneToMany(mappedBy = "followedUser")
-    private List<Follow> followedUsers;
+    private List<Follow> followed;
+
+    @OneToMany(mappedBy = "user")
+    private List<Activity> activityBy;
+
+    @OneToMany(mappedBy = "toUser")
+    private List<Activity> activityTo;
 
 }

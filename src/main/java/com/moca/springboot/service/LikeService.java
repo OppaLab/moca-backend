@@ -1,12 +1,11 @@
 package com.moca.springboot.service;
 
 import com.moca.springboot.dto.LikeDTO;
-import com.moca.springboot.entity.Like;
-import com.moca.springboot.entity.Post;
-import com.moca.springboot.entity.Review;
-import com.moca.springboot.entity.User;
+import com.moca.springboot.entity.*;
+import com.moca.springboot.repository.ActivityRepository;
 import com.moca.springboot.repository.LikeRepository;
 import com.moca.springboot.repository.PostRepository;
+import com.moca.springboot.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,19 +16,36 @@ public class LikeService {
     private LikeRepository likeRepository;
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private ActivityRepository activityRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     public long createLike(LikeDTO.CreateLikeRequest createLikeRequest) {
         Like like = new Like();
+        Activity activity = new Activity();
+        activity.setUser(new User(createLikeRequest.getUserId()));
+
         if (!createLikeRequest.getPostId().isEmpty()) {
             like.setPost(new Post(Long.parseLong(createLikeRequest.getPostId())));
             Post post = postRepository.findById(Long.parseLong(createLikeRequest.getPostId())).get();
             post.setLikeCount(post.getLikeCount() + 1);
             postRepository.save(post);
+
+            activity.setToUser(post.getUser());
+            activity.setActivity("like");
+            activity.setPost(post);
         }
-        if (!createLikeRequest.getReviewId().isEmpty())
+        if (!createLikeRequest.getReviewId().isEmpty()) {
             like.setReview(new Review(Long.parseLong(createLikeRequest.getReviewId())));
+            Review review = reviewRepository.findById(Long.parseLong(createLikeRequest.getReviewId())).get();
+            activity.setToUser(review.getUser());
+            activity.setActivity("like");
+            activity.setReview(review);
+        }
         like.setUser(new User(createLikeRequest.getUserId()));
         Like newLike = likeRepository.save(like);
+        activityRepository.save(activity);
 
         return newLike.getLikeId();
     }
