@@ -21,6 +21,8 @@ public class User {
     private Date createdAt;
     private float userSentimentScore;
     private String profileImageFilePath;
+    private Boolean subscribeToPushNotification;
+    private String registrationToken;
 
     @OneToMany(mappedBy = "user")
     private List<UserCategory> userCategories;

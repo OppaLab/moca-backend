@@ -1,5 +1,6 @@
 package com.moca.springboot.controller;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.moca.springboot.dto.FeedDTO;
 import com.moca.springboot.dto.PostDTO;
 import com.moca.springboot.service.FeedService;
@@ -47,7 +48,7 @@ public class PostController {
     }
 
     @PostMapping("/post")
-    public long createPost(PostDTO.CreatePostRequest createPostRequest) throws IOException {
+    public long createPost(PostDTO.CreatePostRequest createPostRequest) throws IOException, FirebaseMessagingException {
         createPostRequest.setThumbnailImageFilePathName(postService.saveThumbnailImageFile(createPostRequest));
         return postService.createPost(createPostRequest);
     }

@@ -48,6 +48,7 @@ public class UserService {
         user.setEmail(signUpRequest.getEmail());
         user.setCreatedAt(new Date());
         user.setUserSentimentScore(0);
+        user.setRegistrationToken(signUpRequest.getRegistrationToken());
 //        Optional<User> result = userRepository.findByEmail(user.getEmail());
 //        result.ifPresent(m -> {
 //            throw new IllegalStateException("이미 존재하는 회원입니다.");
@@ -121,7 +122,8 @@ public class UserService {
         return userId;
     }
 
-    public UserDTO.GetProfileResponse getProfile(long userId) {
+    public UserDTO.GetProfileResponse getProfile(long myUserId, long userId) {
+
         UserDTO.GetProfileResponse getProfileResponse = new UserDTO.GetProfileResponse();
         User user = userRepository.findById(userId).get();
         getProfileResponse.setNickname(user.getNickname());
@@ -129,7 +131,31 @@ public class UserService {
         getProfileResponse.setNumberOfPosts(postRepository.countByUser(user));
         getProfileResponse.setNumberOfFollowers(followRepository.countByFollowedUser(user));
         getProfileResponse.setNumberOfFollowings(followRepository.countByUser(user));
+        getProfileResponse.setSubscribeToPushNotification(user.getSubscribeToPushNotification());
+        getProfileResponse.setIsFollowed(false);
+
+        if (myUserId != userId) {
+            followRepository.findByUserAndFollowedUser(new User(myUserId), new User(userId)).ifPresent(action -> {
+                getProfileResponse.setIsFollowed(true);
+            });
+        }
 
         return getProfileResponse;
+    }
+
+    public String subscribeToPushNotification(long userId) {
+        User user = userRepository.findById(userId).get();
+        user.setSubscribeToPushNotification(true);
+        userRepository.save(user);
+
+        return "푸시 알림이 설정되었습니다";
+    }
+
+    public String unsubscribeToPushNotification(long userId) {
+        User user = userRepository.findById(userId).get();
+        user.setSubscribeToPushNotification(false);
+        userRepository.save(user);
+
+        return "푸시 알림이 해제되었습니다";
     }
 }

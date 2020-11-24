@@ -11,6 +11,7 @@ public class UserDTO {
         private String nickname;
         private List<String> userCategoryList;
         private String email;
+        private String registrationToken;
     }
 
     @Data
@@ -37,5 +38,12 @@ public class UserDTO {
         private long numberOfPosts;
         private long numberOfFollowers;
         private long numberOfFollowings;
+        private Boolean subscribeToPushNotification;
+        private Boolean IsFollowed;
+    }
+
+    @Data
+    public static class UpdateSubscribeRequest {
+        private long userId;
     }
 }

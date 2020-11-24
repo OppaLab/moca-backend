@@ -1,5 +1,6 @@
 package com.moca.springboot.service;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.moca.springboot.dto.LikeDTO;
 import com.moca.springboot.entity.*;
 import com.moca.springboot.repository.ActivityRepository;
@@ -20,8 +21,10 @@ public class LikeService {
     private ActivityRepository activityRepository;
     @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
+    private FcmService fcmService;
 
-    public long createLike(LikeDTO.CreateLikeRequest createLikeRequest) {
+    public long createLike(LikeDTO.CreateLikeRequest createLikeRequest) throws FirebaseMessagingException {
         Like like = new Like();
         Activity activity = new Activity();
         activity.setUser(new User(createLikeRequest.getUserId()));
@@ -46,6 +49,8 @@ public class LikeService {
         like.setUser(new User(createLikeRequest.getUserId()));
         Like newLike = likeRepository.save(like);
         activityRepository.save(activity);
+
+//        fcmService.sendToToken();
 
         return newLike.getLikeId();
     }

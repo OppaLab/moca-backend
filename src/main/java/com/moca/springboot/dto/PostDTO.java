@@ -15,6 +15,8 @@ public class PostDTO {
         private String postBody;
         private long userId;
         private List<String> postCategories;
+        private Boolean isRandomUserPushNotification;
+        private long numberOfRandomUserPushNotification;
     }
 
     @Data
@@ -52,24 +54,6 @@ public class PostDTO {
         private String review;
         private long createdAt;
     }
-
-
-//    @Data
-//    public static class GetPostsInCategoryResponse {
-//        private long likeCount;
-//        private long commentCount;
-//        private Boolean like;
-//        private long postId;
-//        private long userId;
-//        private String nickname;
-//        private String profileImageFilePath;
-//        private String postTitle;
-//        private String postBody;
-//        private String thumbnailImageFilePath;
-//        private long createdAt;
-//        private List<String> categories;
-//        private Long reviewId;
-//    }
 }
 
 
