@@ -42,7 +42,7 @@ public class FcmService {
 
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .setDatabaseUrl("https://fcm-test-d25a0.firebaseio.com") //TODO: 이거 바꿔야함
+                    .setDatabaseUrl("https://moca-a7445.firebaseio.com")
                     .build();
             FirebaseApp.initializeApp(options);
 

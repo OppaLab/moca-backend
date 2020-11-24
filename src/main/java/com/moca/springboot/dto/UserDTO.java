@@ -40,6 +40,8 @@ public class UserDTO {
         private long numberOfFollowings;
         private Boolean subscribeToPushNotification;
         private Boolean IsFollowed;
+        private List<String> userCategories;
+        private List<String> userEntities;
     }
 
     @Data

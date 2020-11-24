@@ -1,10 +1,7 @@
 package com.moca.springboot.service;
 
 import com.moca.springboot.dto.UserDTO;
-import com.moca.springboot.entity.Activity;
-import com.moca.springboot.entity.Follow;
-import com.moca.springboot.entity.User;
-import com.moca.springboot.entity.UserCategory;
+import com.moca.springboot.entity.*;
 import com.moca.springboot.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +15,9 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -36,7 +35,8 @@ public class UserService {
     private ActivityRepository activityRepository;
     @Autowired
     private FeedAlgorithmService feedAlgorithmService;
-
+    @Autowired
+    private UserEntityRepository userEntityRepository;
 
     @Value("${image.profile.basedir}")
     private String basedir;
@@ -133,12 +133,17 @@ public class UserService {
         getProfileResponse.setNumberOfFollowings(followRepository.countByUser(user));
         getProfileResponse.setSubscribeToPushNotification(user.getSubscribeToPushNotification());
         getProfileResponse.setIsFollowed(false);
-
         if (myUserId != userId) {
             followRepository.findByUserAndFollowedUser(new User(myUserId), new User(userId)).ifPresent(action -> {
                 getProfileResponse.setIsFollowed(true);
             });
         }
+        List<UserCategory> userCategories = userCategoryRepository.findByUser_UserId(userId);
+        List<UserEntity> userEntities = userEntityRepository.findByUser(new User(userId));
+        List<String> userCategoryNames = userCategories.stream().map(userCategory -> userCategory.getCategoryName()).collect(Collectors.toList());
+        List<String> userEntityNames = userEntities.stream().map(userEntity -> userEntity.getEntity()).collect(Collectors.toList());
+        getProfileResponse.setUserCategories(userCategoryNames);
+        getProfileResponse.setUserEntities(userEntityNames);
 
         return getProfileResponse;
     }
