@@ -56,8 +56,8 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public UserDTO.GetProfileResponse getProfile(@RequestParam(value = "userId") long userId) {
-        return userService.getProfile(userId);
+    public UserDTO.GetProfileResponse getProfile(@RequestParam(value = "myUserId") long myUserId, @RequestParam(value = "userId", required = false) long userId) {
+        return userService.getProfile(myUserId, userId);
     }
 
     @GetMapping("/image/profile/{fileName}")
@@ -67,5 +67,15 @@ public class UserController {
                 .contentType(MediaType.parseMediaType(request.getServletContext().
                         getMimeType(resource.getFile().getAbsolutePath())))
                 .body(resource);
+    }
+
+    @PostMapping("/subscribe")
+    public String subscribeToPushNotification(UserDTO.UpdateSubscribeRequest updateSubscribeRequest) {
+        return userService.subscribeToPushNotification(updateSubscribeRequest.getUserId());
+    }
+
+    @PostMapping("/unsubscribe")
+    public String unsubscribeToPushNotification(UserDTO.UpdateSubscribeRequest updateSubscribeRequest) {
+        return userService.unsubscribeToPushNotification(updateSubscribeRequest.getUserId());
     }
 }

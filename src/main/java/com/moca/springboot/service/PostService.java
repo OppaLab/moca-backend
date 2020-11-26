@@ -1,6 +1,7 @@
 package com.moca.springboot.service;
 
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.moca.springboot.dto.PostDTO;
 import com.moca.springboot.entity.*;
 import com.moca.springboot.repository.*;
@@ -55,6 +56,9 @@ public class PostService {
     @Autowired
     ActivityRepository activityRepository;
 
+    @Autowired
+    FcmService fcmService;
+
     //    @Value("${ncp.accesskey}")
 //    private String accessKey;
 //    @Value("${ncp.secretkey}")
@@ -63,7 +67,7 @@ public class PostService {
     private String basedir;
 
 
-    public long createPost(PostDTO.CreatePostRequest createPostRequest) throws IOException {
+    public long createPost(PostDTO.CreatePostRequest createPostRequest) throws IOException, FirebaseMessagingException {
 
         Post post = new Post();
         post.setPostTitle(createPostRequest.getPostTitle());
@@ -93,6 +97,12 @@ public class PostService {
 
         // async 로 일단 post id를 돌려주고 감정분석 및 정량화 실행
         naturalLanguageApiService.naturalLanguageApi(createPostRequest, newPost);
+
+        // 고민글 랜덤 푸시
+        if (createPostRequest.getIsRandomUserPushNotification())
+            fcmService.sendToRandomUser(createPostRequest.getUserId(),
+                    newPost,
+                    createPostRequest.getNumberOfRandomUserPushNotification());
 
         return newPost.getPostId();
     }

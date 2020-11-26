@@ -1,5 +1,6 @@
 package com.moca.springboot.controller;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.moca.springboot.dto.LikeDTO;
 import com.moca.springboot.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class LikeController {
     private LikeService likeService;
 
     @PostMapping("/like")
-    public Long likePost(LikeDTO.CreateLikeRequest createLikeRequest) {
+    public Long likePost(LikeDTO.CreateLikeRequest createLikeRequest) throws FirebaseMessagingException {
         Long likeId = likeService.createLike(createLikeRequest);
         return likeId;
     }
