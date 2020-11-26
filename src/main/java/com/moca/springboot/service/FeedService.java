@@ -31,7 +31,7 @@ public class FeedService {
     @Autowired
     UserRepository userRepository;
 
-    public Page<FeedDTO.GetFeedsAtHomeResponse> getfeedsAtHome(long userId, Pageable pageable) {
+    public Page<FeedDTO.GetFeedsAtHomeResponse> getFeedsAtHome(long userId, Pageable pageable) {
 
         // TODO: 1. 팔로우한 계정의 최근 3일간 게시물을 홈화면에서 맨처음 피즈해줄 것 인지, 팔로잉한 계정의 고민글은 검색 화면에서 따로 보여줄 것인지 논의가 필요함
         // TODO: 만약 팔로잉 계정의 고민글을 최상단에 보여주려면 고민글이 추가될 때 마다 feed table 에 score 1인 tuple 을 추가

@@ -34,7 +34,7 @@ public class PostController {
     @GetMapping("/feed")
     public Page<FeedDTO.GetFeedsAtHomeResponse> getFeedsAtHome(@RequestParam(value = "userId") long userId,
                                                                @PageableDefault(size = 30, sort = "score", direction = Sort.Direction.DESC) Pageable pageable) {
-        return feedService.getfeedsAtHome(userId, pageable);
+        return feedService.getFeedsAtHome(userId, pageable);
     }
 
     @GetMapping("/post")
