@@ -48,4 +48,11 @@ public class UserDTO {
     public static class UpdateSubscribeRequest {
         private long userId;
     }
+
+    @Data
+    public static class UpdateProfileRequest {
+        private String nickname;
+        private List<String> userCategories;
+        private Boolean subscribeToPushNotification;
+    }
 }

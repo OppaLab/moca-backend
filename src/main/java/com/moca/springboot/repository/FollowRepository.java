@@ -5,6 +5,7 @@ import com.moca.springboot.entity.User;
 import com.moca.springboot.entity.pk.FollowPK;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,4 +17,7 @@ public interface FollowRepository extends JpaRepository<Follow, FollowPK> {
     List<Follow> findByFollowedUser(User user);
 
     Optional<Follow> findByUserAndFollowedUser(User user, User followedUser);
+
+    @Transactional
+    void deleteAllByUserOrFollowedUser(User user, User followedUser);
 }

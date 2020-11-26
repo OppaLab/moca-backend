@@ -2,10 +2,7 @@ package com.moca.springboot.service;
 
 import com.moca.springboot.dto.CommentDTO;
 import com.moca.springboot.entity.*;
-import com.moca.springboot.repository.ActivityRepository;
-import com.moca.springboot.repository.CommentRepository;
-import com.moca.springboot.repository.PostRepository;
-import com.moca.springboot.repository.ReviewRepository;
+import com.moca.springboot.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +21,8 @@ public class CommentService {
     private ActivityRepository activityRepository;
     @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
+    private LikeRepository likeRepository;
 
     public long createComment(CommentDTO.CreateCommentRequest createCommentRequest) {
         Comment comment = new Comment();
@@ -61,8 +60,10 @@ public class CommentService {
 
     public long deleteComment(long commentId, long userId) {
         Comment comment = commentRepository.findById(commentId).get();
-        if (comment.getUser().getUserId() == userId)
-            commentRepository.delete(new Comment(commentId));
+        if (comment.getUser().getUserId() == userId) {
+            activityRepository.deleteAllByComment(comment);
+            commentRepository.delete(comment);
+        }
         if (comment.getPost() != null) {
             Post post = postRepository.findById(comment.getPost().getPostId()).get();
             post.setCommentCount(post.getCommentCount() - 1);

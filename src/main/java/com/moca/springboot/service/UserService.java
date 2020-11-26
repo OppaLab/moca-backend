@@ -14,6 +14,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +38,19 @@ public class UserService {
     private FeedAlgorithmService feedAlgorithmService;
     @Autowired
     private UserEntityRepository userEntityRepository;
+    @Autowired
+    private LikeRepository likeRepository;
+    @Autowired
+    private CommentRepository commentRepository;
+    @Autowired
+    private PostEntityRepository postEntityRepository;
+    @Autowired
+    private FeedRepository feedRepository;
+    @Autowired
+    private PostCategoryRepository postCategoryRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
+
 
     @Value("${image.profile.basedir}")
     private String basedir;
@@ -148,19 +162,58 @@ public class UserService {
         return getProfileResponse;
     }
 
-    public String subscribeToPushNotification(long userId) {
+//    public String subscribeToPushNotification(long userId) {
+//        User user = userRepository.findById(userId).get();
+//        user.setSubscribeToPushNotification(true);
+//        userRepository.save(user);
+//
+//        return "푸시 알림이 설정되었습니다";
+//    }
+//
+//    public String unsubscribeToPushNotification(long userId) {
+//        User user = userRepository.findById(userId).get();
+//        user.setSubscribeToPushNotification(false);
+//        userRepository.save(user);
+//
+//        return "푸시 알림이 해제되었습니다";
+//    }
+
+    public long updateProfile(long userId, UserDTO.UpdateProfileRequest updateProfileRequest) {
         User user = userRepository.findById(userId).get();
-        user.setSubscribeToPushNotification(true);
+        if (!updateProfileRequest.getNickname().equals(user.getNickname()))
+            user.setNickname(updateProfileRequest.getNickname());
+        userCategoryRepository.deleteAllByUser(user);
+        List<UserCategory> userCategories = new ArrayList<>();
+        for (String categoryName : updateProfileRequest.getUserCategories()) {
+            userCategories.add(new UserCategory(categoryName, user));
+        }
+        userCategoryRepository.saveAll(userCategories);
+
+        if (updateProfileRequest.getSubscribeToPushNotification() != user.getSubscribeToPushNotification())
+            user.setSubscribeToPushNotification(updateProfileRequest.getSubscribeToPushNotification());
         userRepository.save(user);
 
-        return "푸시 알림이 설정되었습니다";
+        return user.getUserId();
     }
 
-    public String unsubscribeToPushNotification(long userId) {
+    public long signOut(long userId) {
         User user = userRepository.findById(userId).get();
-        user.setSubscribeToPushNotification(false);
-        userRepository.save(user);
+        activityRepository.deleteAllByUserOrToUser(user, user);
+        likeRepository.deleteAllByUser(user);
+        commentRepository.deleteAllByUser(user);
+        feedRepository.deleteAllByUser(user);
+        followRepository.deleteAllByUserOrFollowedUser(user, user);
+        reviewRepository.deleteAllByUser(user);
+        userCategoryRepository.deleteAllByUser(user);
+        userEntityRepository.deleteAllByUser(user);
+        List<Post> posts = postRepository.findByUser_UserId(userId);
+        posts.forEach(post -> {
+            postCategoryRepository.deleteAllByPost(post);
+            postEntityRepository.deleteAllByPost(post);
+        });
+        postRepository.deleteAllByUser(user);
+        userRepository.delete(user);
 
-        return "푸시 알림이 해제되었습니다";
+        return userId;
     }
 }

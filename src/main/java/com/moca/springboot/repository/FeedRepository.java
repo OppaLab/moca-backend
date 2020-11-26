@@ -15,4 +15,7 @@ public interface FeedRepository extends JpaRepository<Feed, FeedPK> {
 
     @Transactional
     void deleteAllByPost(Post post);
+
+    @Transactional
+    void deleteAllByUser(User user);
 }

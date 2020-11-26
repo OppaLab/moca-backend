@@ -6,6 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.transaction.Transactional;
+import java.util.List;
+
 
 public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByUser(User user, Pageable pageable);
@@ -19,4 +22,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByUserNot(User user, Pageable pageable);
 
     Page<Post> findByPostId(Long postId, Pageable pageable);
+
+    List<Post> findByUser_UserId(long userId);
+
+    @Transactional
+    void deleteAllByUser(User user);
 }

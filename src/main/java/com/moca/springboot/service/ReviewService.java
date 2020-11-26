@@ -51,6 +51,7 @@ public class ReviewService {
     public PostDTO.GetReviewResponse getReview(long userId, long reviewId) {
         Review review = reviewRepository.findById(reviewId).get();
         PostDTO.GetReviewResponse getReviewResponse = new PostDTO.GetReviewResponse();
+        getReviewResponse.setReviewId(review.getReviewId());
         getReviewResponse.setCommentCount(commentRepository.countByReview(review));
         getReviewResponse.setLikeCount(likeRepository.countByReview(review));
         getReviewResponse.setLike(Boolean.FALSE);

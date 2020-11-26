@@ -5,6 +5,7 @@ import com.moca.springboot.entity.UserCategory;
 import com.moca.springboot.entity.pk.UserCategoryPK;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface UserCategoryRepository extends JpaRepository<UserCategory, UserCategoryPK> {
@@ -12,4 +13,7 @@ public interface UserCategoryRepository extends JpaRepository<UserCategory, User
     List<UserCategory> findByUser_UserId(long userId);
 
     List<UserCategory> findByUser(User user);
+
+    @Transactional
+    void deleteAllByUser(User user);
 }
