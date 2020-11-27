@@ -16,7 +16,7 @@ public class PostDTO {
         private long userId;
         private List<String> postCategories;
         private Boolean isRandomUserPushNotification;
-        private long numberOfRandomUserPushNotification;
+        private Long numberOfRandomUserPushNotification;
     }
 
     @Data
