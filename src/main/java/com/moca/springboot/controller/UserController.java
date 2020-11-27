@@ -69,13 +69,24 @@ public class UserController {
                 .body(resource);
     }
 
-    @PostMapping("/subscribe")
-    public String subscribeToPushNotification(UserDTO.UpdateSubscribeRequest updateSubscribeRequest) {
-        return userService.subscribeToPushNotification(updateSubscribeRequest.getUserId());
+//    @PostMapping("/subscribe")
+//    public String subscribeToPushNotification(UserDTO.UpdateSubscribeRequest updateSubscribeRequest) {
+//        return userService.subscribeToPushNotification(updateSubscribeRequest.getUserId());
+//    }
+//
+//    @PostMapping("/unsubscribe")
+//    public String unsubscribeToPushNotification(UserDTO.UpdateSubscribeRequest updateSubscribeRequest) {
+//        return userService.unsubscribeToPushNotification(updateSubscribeRequest.getUserId());
+//    }
+
+    // 프로필 수정(닉네임, 알림, 카테고리)
+    @PutMapping("/profile/{userId}")
+    public long updateProfile(@PathVariable long userId, UserDTO.UpdateProfileRequest updateProfileRequest) {
+        return userService.updateProfile(userId, updateProfileRequest);
     }
 
-    @PostMapping("/unsubscribe")
-    public String unsubscribeToPushNotification(UserDTO.UpdateSubscribeRequest updateSubscribeRequest) {
-        return userService.unsubscribeToPushNotification(updateSubscribeRequest.getUserId());
+    @DeleteMapping("/signout/{userId}")
+    public long signOut(@PathVariable long userId) {
+        return userService.signOut(userId);
     }
 }

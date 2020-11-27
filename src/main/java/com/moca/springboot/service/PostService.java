@@ -57,6 +57,9 @@ public class PostService {
     ActivityRepository activityRepository;
 
     @Autowired
+    PostEntityRepository postEntityRepository;
+
+    @Autowired
     FcmService fcmService;
 
     //    @Value("${ncp.accesskey}")
@@ -112,6 +115,14 @@ public class PostService {
         post.setPostId(postId);
         if (postRepository.findById(postId).get().getUser().getUserId() == userId) {
             feedRepository.deleteAllByPost(post);
+            List<Comment> comments = commentRepository.findByPost_PostId(postId);
+            activityRepository.deleteAllByPost(post);
+            comments.forEach(comment -> activityRepository.deleteAllByComment(comment));
+            commentRepository.deleteAllByPost(post);
+            likeRepository.deleteAllByPost(post);
+            postCategoryRepository.deleteAllByPost(post);
+            postEntityRepository.deleteAllByPost(post);
+            reviewRepository.deleteByPost(post);
             postRepository.delete(post);
         }
 
@@ -250,9 +261,59 @@ public class PostService {
     public long deleteReview(long reviewId, long userId) {
         Review review = new Review();
         review.setReviewId(reviewId);
-        if (reviewRepository.findById(reviewId).get().getUser().getUserId() == userId)
+        if (reviewRepository.findById(reviewId).get().getUser().getUserId() == userId) {
+            activityRepository.deleteAllByReview(review);
+            likeRepository.deleteAllByReview(review);
+            commentRepository.deleteAllByReview(review);
             reviewRepository.delete(review);
+        }
         return reviewId;
     }
 
+    public long updatePost(String postId, PostDTO.UpdatePostRequest updatePostRequest) throws IOException {
+
+        Post post = postRepository.findById(Long.parseLong(postId)).get();
+        if (updatePostRequest.getThumbnailImageFile() != null) {
+            PostDTO.CreatePostRequest createPostRequest = new PostDTO.CreatePostRequest();
+            createPostRequest.setThumbnailImageFile(updatePostRequest.getThumbnailImageFile());
+            post.setThumbnailImageFilePath(saveThumbnailImageFile(createPostRequest));
+        }
+
+        postCategoryRepository.deleteAllByPost(post);
+        List<PostCategory> postCategories = new ArrayList<>();
+        for (String categoryName : updatePostRequest.getPostCategories()) {
+            postCategories.add(new PostCategory(categoryName, post));
+        }
+        postCategoryRepository.saveAll(postCategories);
+
+        Post updatedPost;
+        if (!updatePostRequest.getPostTitle().equals(post.getPostTitle()) || !updatePostRequest.getPostBody().equals(post.getPostBody())) {
+            if (!updatePostRequest.getPostTitle().equals(post.getPostTitle())) {
+                post.setPostTitle(updatePostRequest.getPostTitle());
+            }
+            if (!updatePostRequest.getPostBody().equals(post.getPostBody())) {
+                post.setPostBody(updatePostRequest.getPostBody());
+            }
+            updatedPost = postRepository.save(post);
+            postEntityRepository.deleteAllByPost(post);
+            PostDTO.CreatePostRequest createPostRequest = new PostDTO.CreatePostRequest();
+            createPostRequest.setUserId(updatePostRequest.getUserId());
+            createPostRequest.setPostTitle(updatePostRequest.getPostTitle());
+            createPostRequest.setPostBody(updatePostRequest.getPostBody());
+            naturalLanguageApiService.naturalLanguageApi(createPostRequest, updatedPost);
+        } else {
+            updatedPost = postRepository.save(post);
+        }
+
+        return updatedPost.getPostId();
+    }
+
+    public long updateReview(String reviewId, PostDTO.UpdateReviewRequest updateReviewRequest) {
+        Review review = reviewRepository.findById(Long.parseLong(reviewId)).get();
+        if (!updateReviewRequest.getReview().equals(review))
+            review.setReview(updateReviewRequest.getReview());
+        reviewRepository.save(review);
+        return review.getReviewId();
+    }
 }
+

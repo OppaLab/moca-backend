@@ -45,6 +45,7 @@ public class PostDTO {
 
     @Data
     public static class GetReviewResponse {
+        private long reviewId;
         private long likeCount;
         private long commentCount;
         private Boolean like;
@@ -53,6 +54,21 @@ public class PostDTO {
         private String profileImageFilePath;
         private String review;
         private long createdAt;
+    }
+
+    @Data
+    public static class UpdatePostRequest {
+        private MultipartFile thumbnailImageFile;
+        private String thumbnailImageFilePathName;
+        private String postTitle;
+        private String postBody;
+        private long userId;
+        private List<String> postCategories;
+    }
+
+    @Data
+    public static class UpdateReviewRequest {
+        private String review;
     }
 }
 

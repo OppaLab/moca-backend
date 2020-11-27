@@ -59,6 +59,16 @@ public class PostController {
         return postId;
     }
 
+    @PutMapping("/post/{postId}")
+    public long updatePost(@PathVariable String postId, PostDTO.UpdatePostRequest updatePostRequest) throws IOException {
+        return postService.updatePost(postId, updatePostRequest);
+    }
+
+    @PutMapping("/review/{reviewId}")
+    public long updateReview(@PathVariable String reviewId, PostDTO.UpdateReviewRequest updateReviewRequest) {
+        return postService.updateReview(reviewId, updateReviewRequest);
+    }
+
     @GetMapping("/review")
     public PostDTO.GetReviewResponse getReview(@RequestParam(value = "userId") long userId, @RequestParam(value = "reviewId") long reviewId) {
         return reviewService.getReview(userId, reviewId);
