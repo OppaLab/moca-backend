@@ -57,4 +57,10 @@ public class User {
     @OneToMany(mappedBy = "toUser")
     private List<Activity> activityTo;
 
+    @OneToMany(mappedBy = "user")
+    private List<Report> reportList;
+
+    @OneToMany(mappedBy = "reportedUser")
+    private List<Report> reportedList;
+
 }

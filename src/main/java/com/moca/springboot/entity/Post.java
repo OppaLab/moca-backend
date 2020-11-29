@@ -56,4 +56,7 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Activity> activities;
 
+    @OneToMany(mappedBy = "post")
+    private List<Report> reportList;
+
 }

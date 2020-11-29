@@ -39,5 +39,8 @@ public class Comment {
     @OneToMany(mappedBy = "comment")
     private List<Comment> comments;
 
+    @OneToMany(mappedBy = "comment")
+    private List<Report> reportList;
+
 }
 
