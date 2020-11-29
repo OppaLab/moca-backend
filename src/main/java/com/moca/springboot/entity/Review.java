@@ -37,4 +37,7 @@ public class Review {
 
     @OneToMany(mappedBy = "review")
     private List<Activity> activities;
+
+    @OneToMany(mappedBy = "review")
+    private List<Report> reportList;
 }
