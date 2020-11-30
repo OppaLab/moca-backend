@@ -63,10 +63,11 @@ public class UserService {
         user.setCreatedAt(new Date());
         user.setUserSentimentScore(0);
         user.setRegistrationToken(signUpRequest.getRegistrationToken());
-//        Optional<User> result = userRepository.findByEmail(user.getEmail());
-//        result.ifPresent(m -> {
-//            throw new IllegalStateException("이미 존재하는 회원입니다.");
-//        });
+        user.setSubscribeToPushNotification(true);
+        Optional<User> result = userRepository.findByEmail(user.getEmail());
+        result.ifPresent(m -> {
+            throw new IllegalStateException("이미 존재하는 회원입니다.");
+        });
 
         User newUser = userRepository.save(user);
         UserCategory userCategory = new UserCategory();
