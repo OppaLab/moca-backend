@@ -58,8 +58,7 @@ public class PostDTO {
 
     @Data
     public static class UpdatePostRequest {
-        private MultipartFile thumbnailImageFile;
-        private String thumbnailImageFilePathName;
+//        private String thumbnailImageFilePathName;
         private String postTitle;
         private String postBody;
         private long userId;
