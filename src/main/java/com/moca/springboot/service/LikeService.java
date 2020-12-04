@@ -62,9 +62,13 @@ public class LikeService {
             Post post = postRepository.findById(like.getPost().getPostId()).get();
             post.setLikeCount(post.getLikeCount() - 1);
             postRepository.save(post);
+            activityRepository.deleteAllByPost_PostIdAndUser_UserIdAndActivity(Long.parseLong(postId), userId, "like");
         }
-        if (!reviewId.isEmpty())
+        if (!reviewId.isEmpty()) {
             like = likeRepository.findByUserAndReview(new User(userId), new Review(Long.parseLong(reviewId))).get();
+            activityRepository.deleteAllByReview_ReviewIdAndUser_UserIdAndActivity(Long.parseLong(reviewId), userId, "like");
+        }
+
 
         likeRepository.delete(like);
         return like.getLikeId();

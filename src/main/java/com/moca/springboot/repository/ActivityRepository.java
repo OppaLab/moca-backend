@@ -22,4 +22,16 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
     @Transactional
     void deleteAllByUserOrToUser(User user, User toUser);
+
+    @Transactional
+    void deleteAllByPost_PostIdAndUser_UserIdAndActivity(long parseLong, long userId, String activity);
+
+    @Transactional
+    void deleteAllByReview_ReviewIdAndUser_UserIdAndActivity(long parseLong, long userId, String activity);
+
+    @Transactional
+    void deleteAllByUser_UserIdAndActivity(long userId, String activity);
+
+    @Transactional
+    void deleteAllByUser_UserIdAndToUser_UserIdAndActivity(long followedUserId, long userId, String activity);
 }

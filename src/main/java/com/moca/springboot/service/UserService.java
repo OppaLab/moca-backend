@@ -134,6 +134,9 @@ public class UserService {
 
     public Long unfollowUser(long userId, long followedUserId) {
         followRepository.delete(new Follow(new User(userId), new User(followedUserId)));
+        activityRepository.deleteAllByUser_UserIdAndActivity(userId, "follow");
+        activityRepository.deleteAllByUser_UserIdAndToUser_UserIdAndActivity(followedUserId, userId, "post");
+
         return userId;
     }
 
