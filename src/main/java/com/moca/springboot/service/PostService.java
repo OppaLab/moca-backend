@@ -273,11 +273,11 @@ public class PostService {
     public long updatePost(String postId, PostDTO.UpdatePostRequest updatePostRequest) throws IOException {
 
         Post post = postRepository.findById(Long.parseLong(postId)).get();
-        if (updatePostRequest.getThumbnailImageFile() != null) {
-            PostDTO.CreatePostRequest createPostRequest = new PostDTO.CreatePostRequest();
-            createPostRequest.setThumbnailImageFile(updatePostRequest.getThumbnailImageFile());
-            post.setThumbnailImageFilePath(saveThumbnailImageFile(createPostRequest));
-        }
+//        if (updatePostRequest.getThumbnailImageFile() != null) {
+//            PostDTO.CreatePostRequest createPostRequest = new PostDTO.CreatePostRequest();
+//            createPostRequest.setThumbnailImageFile(updatePostRequest.getThumbnailImageFile());
+//            post.setThumbnailImageFilePath(saveThumbnailImageFile(createPostRequest));
+//        }
 
         postCategoryRepository.deleteAllByPost(post);
         List<PostCategory> postCategories = new ArrayList<>();
