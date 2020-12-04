@@ -72,10 +72,16 @@ public class FcmService {
             registrationTokens.add(randomUser.getRegistrationToken());
         }
         MulticastMessage message = MulticastMessage.builder()
+                .putData("postId", newPost.getPostId().toString())
                 .setNotification(Notification.builder()
                         .setTitle(user.getNickname() + "님이 고민글을 무작위로 전달하셨습니다")
                         .setBody(newPost.getPostTitle() + "\n\n" + newPost.getPostBody())
                         .build())
+//                .setAndroidConfig(AndroidConfig.builder()
+//                        .setNotification(AndroidNotification.builder()
+//                                .setClickAction("PostDetailActivity ")
+//                                .build())
+//                        .build())
                 .addAllTokens(registrationTokens)
                 .build();
         BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(message);
