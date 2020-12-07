@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<p>
+    <span>안녕하세요 MOCA 운영팀입니다.</span>
+    <br>
+    <span style="font-weight: bold" th:text="${#dates.format(createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span> 에 작성하신
+    <br>
+    <span th:text="${reportWhat}"></span>: "<span style="font-weight: bold" th:text="${reportedContent}"></span>" 이 신고접수
+    되었습니다.
+    <br>
+    <br>
+    MOCA 운영팀 올림.
+</p>
+</body>
+</html>

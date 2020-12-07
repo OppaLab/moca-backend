@@ -19,4 +19,28 @@ public class ReportDTO {
         // 신고사유: 비방, 욕설, 광고, ...(어느 종류의 신고든 항상 들어가야함)
         private String reportReason;
     }
+
+    @Data
+    public static class GetReportResponse {
+        private Long reportId;
+        // 신고한 사람의 userId
+        private Long userId;
+        // 신고한 사람의 닉네임
+        private String userNickName;
+        // 신고당한 사람의 userId
+        private Long reportedUserId;
+        // 신고당한 사람의 닉네임
+        private String reportedUserNickName;
+        /* reportWhat: 신고한 대상이 고민글 or 후기글 or 댓글 인지 알려줌
+        고민글 = "post"
+        후기글 = "review"
+        댓글 = "comment"
+         */
+        private String reportWhat;
+        private Long postId;
+        private Long reviewId;
+        private Long commentId;
+        private String reportReason;
+        private Long createdAt;
+    }
 }

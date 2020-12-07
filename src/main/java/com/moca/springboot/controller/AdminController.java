@@ -15,7 +15,7 @@ public class AdminController {
     @RequestMapping("/admin")
     public String adminPage(Model model) {
         adminService.adminPage(model);
-
         return "index";
     }
+
 }
