@@ -73,6 +73,7 @@ public class FcmService {
         }
         MulticastMessage message = MulticastMessage.builder()
                 .putData("postId", newPost.getPostId().toString())
+                .putData("thumbnailImageFilePathName", newPost.getThumbnailImageFilePath())
                 .setNotification(Notification.builder()
                         .setTitle(user.getNickname() + "님이 고민글을 무작위로 전달하셨습니다")
                         .setBody(newPost.getPostTitle() + "\n\n" + newPost.getPostBody())
@@ -88,6 +89,5 @@ public class FcmService {
 // See the BatchResponse reference documentation
 // for the contents of response.
         System.out.println(response.getSuccessCount() + " messages were sent successfully");
-
     }
 }

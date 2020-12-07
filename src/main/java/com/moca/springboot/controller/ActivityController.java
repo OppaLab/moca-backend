@@ -22,6 +22,4 @@ public class ActivityController {
                                                                  @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return activityService.getActivities(userId, pageable);
     }
-
-
 }
