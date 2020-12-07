@@ -60,10 +60,10 @@ public class CommentService {
 
     public long deleteComment(long commentId, long userId) {
         Comment comment = commentRepository.findById(commentId).get();
-        if (comment.getUser().getUserId() == userId) {
-            activityRepository.deleteAllByComment(comment);
-            commentRepository.delete(comment);
-        }
+
+        activityRepository.deleteAllByComment(comment);
+        commentRepository.delete(comment);
+
         if (comment.getPost() != null) {
             Post post = postRepository.findById(comment.getPost().getPostId()).get();
             post.setCommentCount(post.getCommentCount() - 1);

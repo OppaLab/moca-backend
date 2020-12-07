@@ -1,6 +1,7 @@
 package com.moca.springboot.controller;
 
 import com.moca.springboot.dto.UserDTO;
+import com.moca.springboot.service.MailService;
 import com.moca.springboot.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +23,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MailService mailService;
 
     @ApiOperation(value = "회원가입", notes = "처음 구글 로그인시 회원가입을진행하고 인증 쿠키를 발급합니다")
     @PostMapping("/signup")
@@ -88,6 +93,11 @@ public class UserController {
     @DeleteMapping("/signout/{userId}")
     public long signOut(@PathVariable long userId) {
         return userService.signOut(userId);
+    }
+
+    @DeleteMapping("/deleteAccountByAdmin")
+    public void deleteAccountByAdmin(@RequestParam(value = "userId") long userId) throws MessagingException {
+        mailService.sendAccountDeleteMail(userId);
     }
 
 

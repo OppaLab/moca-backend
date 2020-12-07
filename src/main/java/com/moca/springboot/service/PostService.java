@@ -113,18 +113,18 @@ public class PostService {
     public long deletePost(long postId, long userId) {
         Post post = new Post();
         post.setPostId(postId);
-        if (postRepository.findById(postId).get().getUser().getUserId() == userId) {
-            feedRepository.deleteAllByPost(post);
-            List<Comment> comments = commentRepository.findByPost_PostId(postId);
-            activityRepository.deleteAllByPost(post);
-            comments.forEach(comment -> activityRepository.deleteAllByComment(comment));
-            commentRepository.deleteAllByPost(post);
-            likeRepository.deleteAllByPost(post);
-            postCategoryRepository.deleteAllByPost(post);
-            postEntityRepository.deleteAllByPost(post);
-            reviewRepository.deleteByPost(post);
-            postRepository.delete(post);
-        }
+
+        feedRepository.deleteAllByPost(post);
+        List<Comment> comments = commentRepository.findByPost_PostId(postId);
+        activityRepository.deleteAllByPost(post);
+        comments.forEach(comment -> activityRepository.deleteAllByComment(comment));
+        commentRepository.deleteAllByPost(post);
+        likeRepository.deleteAllByPost(post);
+        postCategoryRepository.deleteAllByPost(post);
+        postEntityRepository.deleteAllByPost(post);
+        reviewRepository.deleteByPost(post);
+        postRepository.delete(post);
+
 
         return post.getPostId();
     }
@@ -261,12 +261,11 @@ public class PostService {
     public long deleteReview(long reviewId, long userId) {
         Review review = new Review();
         review.setReviewId(reviewId);
-        if (reviewRepository.findById(reviewId).get().getUser().getUserId() == userId) {
-            activityRepository.deleteAllByReview(review);
-            likeRepository.deleteAllByReview(review);
-            commentRepository.deleteAllByReview(review);
-            reviewRepository.delete(review);
-        }
+        activityRepository.deleteAllByReview(review);
+        likeRepository.deleteAllByReview(review);
+        commentRepository.deleteAllByReview(review);
+        reviewRepository.delete(review);
+
         return reviewId;
     }
 
