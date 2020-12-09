@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class CommentService {
@@ -22,7 +23,7 @@ public class CommentService {
     @Autowired
     private ReviewRepository reviewRepository;
     @Autowired
-    private LikeRepository likeRepository;
+    private ReportRepository reportRepository;
 
     public long createComment(CommentDTO.CreateCommentRequest createCommentRequest) {
         Comment comment = new Comment();
@@ -58,7 +59,7 @@ public class CommentService {
         return newComment.getCommentId();
     }
 
-    public long deleteComment(long commentId, long userId) {
+    public long deleteComment(long commentId) {
         Comment comment = commentRepository.findById(commentId).get();
 
         activityRepository.deleteAllByComment(comment);
@@ -97,4 +98,13 @@ public class CommentService {
         return getCommentsResponses;
     }
 
+    public void deleteByComment(long commentId) {
+        List<Report> reports = reportRepository.findAllByComment_CommentId(commentId);
+        reports.forEach(report -> {
+            report.setIsHandled(true);
+        });
+        reportRepository.saveAll(reports);
+
+        deleteComment(commentId);
+    }
 }

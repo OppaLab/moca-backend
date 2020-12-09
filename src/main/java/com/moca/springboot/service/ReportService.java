@@ -33,6 +33,7 @@ public class ReportService {
         Report report = new Report();
         report.setUser(new User(reportRequest.getUserId()));
         report.setReportReason(reportRequest.getReportReason());
+        report.setIsHandled(false);
 
         // 계정 신고
         if (reportRequest.getReportedUserId() != null) {
@@ -61,7 +62,7 @@ public class ReportService {
 
 
     public Page<ReportDTO.GetReportResponse> getReports(Pageable pageable) {
-        Page<Report> reports = reportRepository.findAll(pageable);
+        Page<Report> reports = reportRepository.findAllByIsHandled(false, pageable);
         Page<ReportDTO.GetReportResponse> getReportResponses;
         getReportResponses =
                 reports.map(report -> {
@@ -76,10 +77,19 @@ public class ReportService {
                         getReportResponse.setPostId(report.getPost().getPostId());
                     } else if (report.getReview() != null) {
                         getReportResponse.setReportWhat("review");
+                        getReportResponse.setPostId(report.getReview().getPost().getPostId());
                         getReportResponse.setReviewId(report.getReview().getReviewId());
                     } else if (report.getComment() != null) {
                         getReportResponse.setReportWhat("comment");
-                        getReportResponse.setPostId(report.getComment().getPost().getPostId());
+
+                        if (report.getComment().getPost() != null) {
+                            getReportResponse.setPostId(report.getComment().getPost().getPostId());
+                        }
+                        if (report.getComment().getReview() != null) {
+                            getReportResponse.setReviewId(report.getComment().getReview().getReviewId());
+                            getReportResponse.setPostId(report.getComment().getReview().getPost().getPostId());
+                        }
+
                         getReportResponse.setCommentId(report.getComment().getCommentId());
                     }
                     getReportResponse.setReportReason(report.getReportReason());

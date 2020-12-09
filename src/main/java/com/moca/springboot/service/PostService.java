@@ -62,6 +62,9 @@ public class PostService {
     @Autowired
     FcmService fcmService;
 
+    @Autowired
+    ReportRepository reportRepository;
+
     //    @Value("${ncp.accesskey}")
 //    private String accessKey;
 //    @Value("${ncp.secretkey}")
@@ -110,7 +113,7 @@ public class PostService {
         return newPost.getPostId();
     }
 
-    public long deletePost(long postId, long userId) {
+    public long deletePost(long postId) {
         Post post = new Post();
         post.setPostId(postId);
 
@@ -258,7 +261,7 @@ public class PostService {
         return new UrlResource(path.toUri());
     }
 
-    public long deleteReview(long reviewId, long userId) {
+    public long deleteReview(long reviewId) {
         Review review = new Review();
         review.setReviewId(reviewId);
         activityRepository.deleteAllByReview(review);
@@ -314,5 +317,28 @@ public class PostService {
         reviewRepository.save(review);
         return review.getReviewId();
     }
+
+    public void deletePostByAdmin(long postId) {
+
+        List<Report> reports = reportRepository.findAllByPost_PostId(postId);
+        reports.forEach(report -> {
+            report.setIsHandled(true);
+        });
+        reportRepository.saveAll(reports);
+
+        deletePost(postId);
+    }
+
+    public void deleteReviewByAdmin(long reviewId) {
+        List<Report> reports = reportRepository.findAllByReview_ReviewId(reviewId);
+        reports.forEach(report -> {
+            report.setIsHandled(true);
+        });
+        reportRepository.saveAll(reports);
+
+        deleteReview(reviewId);
+    }
+
+
 }
 

@@ -43,4 +43,6 @@ public class Report {
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
     private Date createdAt;
+
+    private Boolean isHandled;
 }
