@@ -29,7 +29,7 @@ public class ReportController {
 
     // http://localhost:8080/report?page=0 처럼 page만 request parameter로 넘겨주면 됨
     @GetMapping("/report")
-    public Page<ReportDTO.GetReportResponse> getActivities(@PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+    public Page<ReportDTO.GetReportResponse> getReports(@PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return reportService.getReports(pageable);
     }
 

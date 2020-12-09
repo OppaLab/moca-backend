@@ -55,7 +55,7 @@ public class PostController {
 
     @DeleteMapping("/post")
     public long deletePost(@RequestParam(value = "postId") long postId, @RequestParam(value = "userId") long userId) {
-        postService.deletePost(postId, userId);
+        postService.deletePost(postId);
         return postId;
     }
 
@@ -82,7 +82,7 @@ public class PostController {
 
     @DeleteMapping("/review")
     public long deleteReview(@RequestParam(value = "reviewId") long reviewId, @RequestParam(value = "userId") long userId) {
-        return postService.deleteReview(reviewId, userId);
+        return postService.deleteReview(reviewId);
     }
 
     @GetMapping("/image/thumbnail/{fileName}")
