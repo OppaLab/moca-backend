@@ -1,10 +1,12 @@
 package com.moca.springboot.repository;
 
 import com.moca.springboot.entity.Report;
+import com.moca.springboot.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface ReportRepository extends JpaRepository<Report, Long> {
@@ -23,4 +25,7 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     List<Report> findAllByReview_ReviewId(long reviewId);
 
     List<Report> findAllByComment_CommentId(long commentId);
+
+    @Transactional
+    void deleteAllByUserOrReportedUser(User user, User reportedUser);
 }
