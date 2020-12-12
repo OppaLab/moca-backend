@@ -114,11 +114,16 @@ public class PostService {
     }
 
     public long deletePost(long postId) {
-        Post post = new Post();
-        post.setPostId(postId);
 
+        Post post = postRepository.findById(postId).get();
+        List<Comment> comments;
         feedRepository.deleteAllByPost(post);
-        List<Comment> comments = commentRepository.findByPost_PostId(postId);
+        if (post.getReview() != null) {
+            comments = commentRepository.findByPost_PostIdOrReview_ReviewId(postId, post.getReview().getReviewId());
+            activityRepository.deleteAllByReview(post.getReview());
+        } else
+            comments = commentRepository.findByPost_PostId(postId);
+
         activityRepository.deleteAllByPost(post);
         comments.forEach(comment -> activityRepository.deleteAllByComment(comment));
         commentRepository.deleteAllByPost(post);
