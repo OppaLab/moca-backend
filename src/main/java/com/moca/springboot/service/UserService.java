@@ -50,6 +50,8 @@ public class UserService {
     private PostCategoryRepository postCategoryRepository;
     @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
+    private ReportRepository reportRepository;
 
 
     @Value("${image.profile.basedir}")
@@ -224,6 +226,8 @@ public class UserService {
             postCategoryRepository.deleteAllByPost(post);
             postEntityRepository.deleteAllByPost(post);
         });
+
+        reportRepository.deleteAllByUserOrReportedUser(user, user);
         postRepository.deleteAllByUser(user);
         userRepository.delete(user);
 
