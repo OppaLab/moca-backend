@@ -206,12 +206,21 @@ public class UserService {
         likeRepository.deleteAllByUser(user);
         commentRepository.deleteAllByUser(user);
         feedRepository.deleteAllByUser(user);
+
         followRepository.deleteAllByUserOrFollowedUser(user, user);
         reviewRepository.deleteAllByUser(user);
         userCategoryRepository.deleteAllByUser(user);
         userEntityRepository.deleteAllByUser(user);
         List<Post> posts = postRepository.findByUser_UserId(userId);
         posts.forEach(post -> {
+            commentRepository.deleteAllByPost(post);
+            if (post.getReview() != null)
+                commentRepository.deleteAllByReview(post.getReview());
+            likeRepository.deleteAllByPost(post);
+            if (post.getReview() != null)
+                likeRepository.deleteAllByReview(post.getReview());
+
+            feedRepository.deleteAllByPost(post);
             postCategoryRepository.deleteAllByPost(post);
             postEntityRepository.deleteAllByPost(post);
         });
