@@ -36,5 +36,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Transactional
     void deleteAllByUser(User user);
 
-    List<Comment> findByPost_PostIdOrReview_ReviewId(long postId, Long reviewId);
+    List<Comment> findAllByReview(Review review);
 }

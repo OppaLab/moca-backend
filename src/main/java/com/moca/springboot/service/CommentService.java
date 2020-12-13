@@ -98,7 +98,7 @@ public class CommentService {
         return getCommentsResponses;
     }
 
-    public void deleteByComment(long commentId) {
+    public void deleteCommentByAdmin(long commentId) {
         List<Report> reports = reportRepository.findAllByComment_CommentId(commentId);
         reports.forEach(report -> {
             report.setIsHandled(true);
