@@ -26,8 +26,11 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 
     List<Report> findAllByComment_CommentId(long commentId);
 
-    @Transactional
-    void deleteAllByUserOrReportedUser(User user, User reportedUser);
-
     List<Report> findAllByCommentNotNullAndIsHandled(boolean isHandled);
+
+    @Transactional
+    void deleteAllByUser_UserId(long userId);
+
+    @Transactional
+    void deleteAllByReportedUser_UserId(long userId);
 }

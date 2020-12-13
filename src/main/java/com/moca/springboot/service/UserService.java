@@ -204,6 +204,8 @@ public class UserService {
 
     public long signOut(long userId) {
         User user = userRepository.findById(userId).get();
+        reportRepository.deleteAllByUser_UserId(userId);
+        reportRepository.deleteAllByReportedUser_UserId(userId);
         activityRepository.deleteAllByUserOrToUser(user, user);
         likeRepository.deleteAllByUser(user);
         commentRepository.deleteAllByUser(user);
@@ -227,7 +229,6 @@ public class UserService {
             postEntityRepository.deleteAllByPost(post);
         });
 
-        reportRepository.deleteAllByUserOrReportedUser(user, user);
         postRepository.deleteAllByUser(user);
         userRepository.delete(user);
 
