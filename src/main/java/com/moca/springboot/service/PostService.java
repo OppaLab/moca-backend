@@ -365,6 +365,10 @@ public class PostService {
                 if (commentReport.getComment().getReview().getReviewId() == review.getReviewId())
                     commentReport.setIsHandled(true);
         });
+        List<Report> reviewReports = reportRepository.findAllByReview_ReviewId(review.getReviewId());
+        reviewReports.forEach(reviewReport -> {
+            reviewReport.setIsHandled(true);
+        });
         reportRepository.saveAll(reports);
 
         deleteReview(reviewId);
