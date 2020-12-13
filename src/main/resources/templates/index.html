@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>MOCA Admin</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body style="background: lightgray">
+
+<div class="container bg-white" style="margin-top: 10px">
+    <h3 style="padding-top: 10px; text-align: center;">MOCA 신고 관리 페이지</h3>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#post">고민글 신고 목록</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " data-toggle="tab" href="#review">후기글 신고 목록</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " data-toggle="tab" href="#comment">댓글 신고 목록</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#user">사용자 신고 목록</a>
+        </li>
+
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="container tab-pane active" id="post"><br>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>시각</th>
+                    <th>신고자 ID</th>
+                    <th>신고된 고민글 ID</th>
+                    <th>신고된 고민글 작성자 ID</th>
+                    <th>신고 사유</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr data-target="#postModal" data-toggle="modal" th:each="report: ${postReportList}">
+
+                    <td th:text="${#dates.format(report.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td th:text="${report.userId}"></td>
+                    <td th:text="${report.reportedUserId}"></td>
+                    <td th:text="${report.postId}"></td>
+                    <td th:text="${report.reportReason}"></td>
+
+                    <!-- The Modal -->
+                    <div class="modal" id="postModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h3 class="modal-title">신고된 고민글 내용</h3>
+                                    <button class="close" data-dismiss="modal" type="button">×</button>
+                                </div>
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                    <h4 class="modal-title" th:text="${report.postTitle}"></h4>
+                                    <p th:text="${report.postBody}"></p>
+                                </div>
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+                                    <button class="btn btn-danger" data-dismiss="modal" type="button">Close</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="container tab-pane fade" id="review"><br>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>시각</th>
+                    <th>신고자 ID</th>
+                    <th>신고된 후기글 ID</th>
+                    <th>신고된 후기글 작성자 ID</th>
+                    <th>신고 사유</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr data-target="#reviewModal" data-toggle="modal" th:each="report: ${reviewReportList}">
+
+                    <td th:text="${#dates.format(report.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td th:text="${report.userId}"></td>
+                    <td th:text="${report.reportedUserId}"></td>
+                    <td th:text="${report.reviewId}"></td>
+                    <td th:text="${report.reportReason}"></td>
+
+                    <!-- The Modal -->
+                    <div class="modal" id="reviewModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h3 class="modal-title">신고된 후기글 내용</h3>
+                                    <button class="close" data-dismiss="modal" type="button">×</button>
+                                </div>
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                    <p th:text="${report.review}"></p>
+                                </div>
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+                                    <button class="btn btn-danger" data-dismiss="modal" type="button">Close</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="container tab-pane fade" id="comment"><br>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>시각</th>
+                    <th>신고자 ID</th>
+                    <th>신고된 댓글 ID</th>
+                    <th>신고된 댓글 작성자 ID</th>
+                    <th>신고 사유</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr data-target="#commentModal" data-toggle="modal" th:each="report: ${commentReportList}">
+
+                    <td th:text="${#dates.format(report.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td th:text="${report.userId}"></td>
+                    <td th:text="${report.reportedUserId}"></td>
+                    <td th:text="${report.commentId}"></td>
+                    <td th:text="${report.reportReason}"></td>
+
+                    <!-- The Modal -->
+                    <div class="modal" id="commentModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h3 class="modal-title">신고된 댓글 내용</h3>
+                                    <button class="close" data-dismiss="modal" type="button">×</button>
+                                </div>
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                    <p th:text="${report.comment}"></p>
+                                </div>
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+                                    <button class="btn btn-danger" data-dismiss="modal" type="button">Close</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="container tab-pane fade" id="user"><br>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>시각</th>
+                    <th>신고자 ID</th>
+                    <th>신고된 사용자 ID</th>
+                    <th>신고 사유</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr th:each="report: ${userReportList}">
+                    <td th:text="${#dates.format(report.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td th:text="${report.userId}"></td>
+                    <td th:text="${report.reportedUserId}"></td>
+                    <td th:text="${report.reportReason}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+</body>
+</html>
