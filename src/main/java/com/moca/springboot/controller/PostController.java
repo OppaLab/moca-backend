@@ -74,7 +74,6 @@ public class PostController {
         return reviewService.getReview(userId, reviewId);
     }
 
-
     @PostMapping("/review")
     public long createReview(PostDTO.CreateReviewRequest createReviewRequest) {
         return reviewService.createReview(createReviewRequest);

@@ -52,7 +52,7 @@ public class AdminController {
 
     @DeleteMapping("/deleteCommentByAdmin")
     public long deleteCommentByAdmin(@RequestParam(value = "commentId") long commentId) {
-        commentService.deleteByComment(commentId);
+        commentService.deleteCommentByAdmin(commentId);
         return commentId;
     }
 

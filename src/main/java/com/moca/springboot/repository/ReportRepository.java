@@ -28,4 +28,6 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 
     @Transactional
     void deleteAllByUserOrReportedUser(User user, User reportedUser);
+
+    List<Report> findAllByCommentNotNullAndIsHandled(boolean isHandled);
 }
