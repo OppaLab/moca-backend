@@ -1,12 +1,16 @@
 package com.moca.springboot.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public class UserDTO {
     @Data
+    @AllArgsConstructor
     public static class SignUpRequest {
         private String nickname;
         private List<String> userCategoryList;
@@ -21,11 +25,13 @@ public class UserDTO {
     }
 
     @Data
+    @AllArgsConstructor
     public static class SignInRequest {
         private String email;
     }
 
     @Data
+    @AllArgsConstructor
     public static class FollowRequest {
         private long userId;
         private long followedUserId;
@@ -50,6 +56,7 @@ public class UserDTO {
     }
 
     @Data
+    @AllArgsConstructor
     public static class UpdateProfileRequest {
         private String nickname;
         private List<String> userCategories;

@@ -73,7 +73,7 @@ public class PostService {
     private String basedir;
 
 
-    public long createPost(PostDTO.CreatePostRequest createPostRequest) throws IOException, FirebaseMessagingException {
+    public Long createPost(PostDTO.CreatePostRequest createPostRequest) throws IOException, FirebaseMessagingException {
 
         Post post = new Post();
         post.setPostTitle(createPostRequest.getPostTitle());
@@ -113,7 +113,7 @@ public class PostService {
         return newPost.getPostId();
     }
 
-    public long deletePost(long postId) {
+    public Long deletePost(long postId) {
 
         Post post = postRepository.findById(postId).get();
         List<Comment> comments;
@@ -271,7 +271,7 @@ public class PostService {
         return new UrlResource(path.toUri());
     }
 
-    public long deleteReview(long reviewId) {
+    public Long deleteReview(long reviewId) {
         Review review = new Review();
         review.setReviewId(reviewId);
         activityRepository.deleteAllByReview(review);
@@ -282,7 +282,7 @@ public class PostService {
         return reviewId;
     }
 
-    public long updatePost(String postId, PostDTO.UpdatePostRequest updatePostRequest) throws IOException {
+    public Long updatePost(String postId, PostDTO.UpdatePostRequest updatePostRequest) throws IOException {
 
         Post post = postRepository.findById(Long.parseLong(postId)).get();
 //        if (updatePostRequest.getThumbnailImageFile() != null) {
@@ -320,7 +320,7 @@ public class PostService {
         return updatedPost.getPostId();
     }
 
-    public long updateReview(String reviewId, PostDTO.UpdateReviewRequest updateReviewRequest) {
+    public Long updateReview(String reviewId, PostDTO.UpdateReviewRequest updateReviewRequest) {
         Review review = reviewRepository.findById(Long.parseLong(reviewId)).get();
         if (!updateReviewRequest.getReview().equals(review))
             review.setReview(updateReviewRequest.getReview());

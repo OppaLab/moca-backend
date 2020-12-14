@@ -59,6 +59,7 @@ public class UserService {
 
     public Long signUp(UserDTO.SignUpRequest signUpRequest) {
 
+
         User user = new User();
         user.setNickname(signUpRequest.getNickname());
         user.setEmail(signUpRequest.getEmail());
