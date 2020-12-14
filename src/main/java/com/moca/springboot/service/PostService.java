@@ -73,7 +73,7 @@ public class PostService {
     private String basedir;
 
 
-    public long createPost(PostDTO.CreatePostRequest createPostRequest) throws IOException, FirebaseMessagingException {
+    public Long createPost(PostDTO.CreatePostRequest createPostRequest) throws IOException, FirebaseMessagingException {
 
         Post post = new Post();
         post.setPostTitle(createPostRequest.getPostTitle());
@@ -113,13 +113,15 @@ public class PostService {
         return newPost.getPostId();
     }
 
-    public long deletePost(long postId) {
+    public Long deletePost(long postId) {
 
         Post post = postRepository.findById(postId).get();
         List<Comment> comments;
         feedRepository.deleteAllByPost(post);
         if (post.getReview() != null) {
-            comments = commentRepository.findByPost_PostIdOrReview_ReviewId(postId, post.getReview().getReviewId());
+            comments = commentRepository.findByPost_PostId(postId);
+            List<Comment> reviewComments = commentRepository.findAllByReview(post.getReview());
+            comments.addAll(reviewComments);
             activityRepository.deleteAllByReview(post.getReview());
         } else
             comments = commentRepository.findByPost_PostId(postId);
@@ -127,6 +129,9 @@ public class PostService {
         activityRepository.deleteAllByPost(post);
         comments.forEach(comment -> activityRepository.deleteAllByComment(comment));
         commentRepository.deleteAllByPost(post);
+        if(post.getReview() != null){
+            commentRepository.deleteAllByReview(post.getReview());
+        }
         likeRepository.deleteAllByPost(post);
         postCategoryRepository.deleteAllByPost(post);
         postEntityRepository.deleteAllByPost(post);
@@ -266,7 +271,7 @@ public class PostService {
         return new UrlResource(path.toUri());
     }
 
-    public long deleteReview(long reviewId) {
+    public Long deleteReview(long reviewId) {
         Review review = new Review();
         review.setReviewId(reviewId);
         activityRepository.deleteAllByReview(review);
@@ -277,7 +282,7 @@ public class PostService {
         return reviewId;
     }
 
-    public long updatePost(String postId, PostDTO.UpdatePostRequest updatePostRequest) throws IOException {
+    public Long updatePost(String postId, PostDTO.UpdatePostRequest updatePostRequest) throws IOException {
 
         Post post = postRepository.findById(Long.parseLong(postId)).get();
 //        if (updatePostRequest.getThumbnailImageFile() != null) {
@@ -315,7 +320,7 @@ public class PostService {
         return updatedPost.getPostId();
     }
 
-    public long updateReview(String reviewId, PostDTO.UpdateReviewRequest updateReviewRequest) {
+    public Long updateReview(String reviewId, PostDTO.UpdateReviewRequest updateReviewRequest) {
         Review review = reviewRepository.findById(Long.parseLong(reviewId)).get();
         if (!updateReviewRequest.getReview().equals(review))
             review.setReview(updateReviewRequest.getReview());
@@ -324,8 +329,24 @@ public class PostService {
     }
 
     public void deletePostByAdmin(long postId) {
+        Post post = postRepository.findById(postId).get();
+        Review review = post.getReview();
+
+        List<Report> commentReports = reportRepository.findAllByCommentNotNullAndIsHandled(false);
+        commentReports.forEach(commentReport -> {
+            if(commentReport.getComment().getPost() != null)
+                if (commentReport.getComment().getPost().getPostId() == postId)
+                    commentReport.setIsHandled(true);
+            if(commentReport.getComment().getReview() != null)
+                if (commentReport.getComment().getReview().getReviewId() == review.getReviewId())
+                    commentReport.setIsHandled(true);
+        });
 
         List<Report> reports = reportRepository.findAllByPost_PostId(postId);
+        if(review != null) {
+            List<Report> reviewReports = reportRepository.findAllByReview_ReviewId(review.getReviewId());
+            reports.addAll(reviewReports);
+        }
         reports.forEach(report -> {
             report.setIsHandled(true);
         });
@@ -335,9 +356,18 @@ public class PostService {
     }
 
     public void deleteReviewByAdmin(long reviewId) {
+        Review review = reviewRepository.findById(reviewId).get();
+
         List<Report> reports = reportRepository.findAllByReview_ReviewId(reviewId);
-        reports.forEach(report -> {
-            report.setIsHandled(true);
+        List<Report> commentReports = reportRepository.findAllByCommentNotNullAndIsHandled(false);
+        commentReports.forEach(commentReport -> {
+            if(commentReport.getComment().getReview() != null)
+                if (commentReport.getComment().getReview().getReviewId() == review.getReviewId())
+                    commentReport.setIsHandled(true);
+        });
+        List<Report> reviewReports = reportRepository.findAllByReview_ReviewId(review.getReviewId());
+        reviewReports.forEach(reviewReport -> {
+            reviewReport.setIsHandled(true);
         });
         reportRepository.saveAll(reports);
 

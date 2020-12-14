@@ -24,7 +24,7 @@ public class LikeService {
     @Autowired
     private FcmService fcmService;
 
-    public long createLike(LikeDTO.CreateLikeRequest createLikeRequest) throws FirebaseMessagingException {
+    public Long createLike(LikeDTO.CreateLikeRequest createLikeRequest) throws FirebaseMessagingException {
         Like like = new Like();
         Activity activity = new Activity();
         activity.setUser(new User(createLikeRequest.getUserId()));
@@ -55,7 +55,7 @@ public class LikeService {
         return newLike.getLikeId();
     }
 
-    public long deleteLike(String postId, String reviewId, long userId) {
+    public Long deleteLike(String postId, String reviewId, long userId) {
         Like like = null;
         if (!postId.isEmpty()) {
             like = likeRepository.findByUserAndPost(new User(userId), new Post(Long.parseLong(postId))).get();

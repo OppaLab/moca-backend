@@ -27,7 +27,7 @@ public class ReviewService {
     @Autowired
     private ActivityRepository activityRepository;
 
-    public long createReview(PostDTO.CreateReviewRequest createReviewRequest) {
+    public Long createReview(PostDTO.CreateReviewRequest createReviewRequest) {
         Review review = new Review();
         review.setPost(new Post(createReviewRequest.getPostId()));
         review.setUser(new User(createReviewRequest.getUserId()));

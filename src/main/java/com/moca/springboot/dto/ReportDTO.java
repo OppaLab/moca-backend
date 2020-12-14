@@ -1,10 +1,12 @@
 package com.moca.springboot.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 public class ReportDTO {
 
     @Data
+    @AllArgsConstructor
     public static class ReportRequest {
         // 나의 userId
         private Long userId;
