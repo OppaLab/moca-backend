@@ -25,7 +25,7 @@ public class CommentService {
     @Autowired
     private ReportRepository reportRepository;
 
-    public long createComment(CommentDTO.CreateCommentRequest createCommentRequest) {
+    public Long createComment(CommentDTO.CreateCommentRequest createCommentRequest) {
         Comment comment = new Comment();
 
         Activity activity = new Activity();
@@ -59,7 +59,7 @@ public class CommentService {
         return newComment.getCommentId();
     }
 
-    public long deleteComment(long commentId) {
+    public Long deleteComment(long commentId) {
         Comment comment = commentRepository.findById(commentId).get();
 
         activityRepository.deleteAllByComment(comment);

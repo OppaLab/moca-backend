@@ -1,6 +1,8 @@
 package com.moca.springboot.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -8,6 +10,8 @@ import java.util.List;
 
 public class PostDTO {
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class CreatePostRequest {
         private MultipartFile thumbnailImageFile;
         private String thumbnailImageFilePathName;
@@ -37,6 +41,7 @@ public class PostDTO {
     }
 
     @Data
+    @AllArgsConstructor
     public static class CreateReviewRequest {
         private long postId;
         private long userId;
@@ -57,6 +62,7 @@ public class PostDTO {
     }
 
     @Data
+    @AllArgsConstructor
     public static class UpdatePostRequest {
 //        private String thumbnailImageFilePathName;
         private String postTitle;
@@ -66,6 +72,7 @@ public class PostDTO {
     }
 
     @Data
+    @AllArgsConstructor
     public static class UpdateReviewRequest {
         private String review;
     }

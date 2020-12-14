@@ -1,10 +1,12 @@
 package com.moca.springboot.dto;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 public class CommentDTO {
     @Data
+    @AllArgsConstructor
     public static class CreateCommentRequest {
         private String postId;
         private String reviewId;
