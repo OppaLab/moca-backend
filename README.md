@@ -1,4 +1,4 @@
-# 2020-2 SW캡스톤디자인 Spring Boot Project
+# MOCA - 고민상담 SNS
 
 * 팀명: OppaLab
 * 개발자: 황재완(백엔드 개발 담당)
